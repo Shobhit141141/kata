@@ -13,6 +13,10 @@ export const CONSTANTS = {
   PORT: process.env.PORT || 5000,
   JWT_SECRET: process.env.JWT_SECRET || 'your_default_jwt_secret',
 
+  CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME || 'your_cloud_name',
+  CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY || 'your_api_key',
+  CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET || 'your_api_secret',
+
   NODE_ENV: process.env.NODE_ENV || 'development',
   CLIENT_URL: process.env.CLIENT_URL || 'http://localhost:3000',
 };

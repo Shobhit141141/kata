@@ -1,4 +1,7 @@
-export interface UserInfo {
+import { Request } from "express";
+import { Document } from "mongoose";
+
+export interface IUser extends Document {
   id: string;
   username: string;
   email: string;
@@ -8,11 +11,26 @@ export interface UserInfo {
   updatedAt: Date;
 }
 
+export interface ISweet extends Document {
+  name: string;
+  category: string;
+  price: number;
+  quantity: number;
+  imageUrl?: string;
+  imagePublicId?: string;
+}
+
 declare global {
   namespace Express {
     interface Request {
-      user?: UserInfo;
+      user?: IUser;
       accessToken?: string;
     }
   }
+}
+
+export interface MulterRequest extends Request {
+  file?: {
+    path: string;
+  };
 }
