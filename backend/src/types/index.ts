@@ -1,5 +1,5 @@
-import { Request } from "express";
-import { Document } from "mongoose";
+import { Request } from 'express';
+import { Document } from 'mongoose';
 
 export interface IUser extends Document {
   id: string;
@@ -25,6 +25,7 @@ declare global {
     interface Request {
       user?: IUser;
       accessToken?: string;
+      isAdmin?: boolean;
     }
   }
 }

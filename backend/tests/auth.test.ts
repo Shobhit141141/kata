@@ -12,7 +12,9 @@ beforeEach(async () => {
 });
 
 afterAll(async () => {
+  await mongoose.connection.collection('users').deleteMany({});
   await mongoose.disconnect();
+  
 });
 
 describe('Auth Routes', () => {
