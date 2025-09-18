@@ -19,7 +19,7 @@ createRoot(document.getElementById('root')).render(
         <AuthProvider>
           <BrowserRouter>
             <MantineProvider forceColorScheme='light' theme={{ colorScheme: 'light', primaryColor: 'orange', defaultRadius: 'md' }}>
-              <ToastContainer position='top-center' />
+              <ToastContainer position='top-center' theme='colored' />
               <App />
             </MantineProvider>
           </BrowserRouter>

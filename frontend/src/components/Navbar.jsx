@@ -9,7 +9,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { logoutUser } from "../api/user";
 import { useAuthContext } from "../context/AuthContext";
 
-export default function Navbar({ user, isLoading }) {
+export default function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -25,18 +25,33 @@ export default function Navbar({ user, isLoading }) {
       navigate("/login");
     },
   });
+
+  
+
   const navLinks = [
     {
       to: "/login",
       label: "Login",
-      show: !user,
+      show: !isAuthLoading && !isAuthenticated,
       icon: <FaUserCheck className="mr-2 w-5 h-5" />,
     },
     {
       to: "/register",
       label: "Register",
-      show: !user,
+      show: !isAuthLoading && !isAuthenticated,
       icon: <FaUserPlus className="mr-2 w-5 h-5" />,
+    },
+    {
+      to: "/sweets",
+      label: "Sweets",
+      show: isAuthenticated,
+      icon: <AiFillHome className="mr-2 w-5 h-5" />,
+    },
+    {
+      to: "/inventory",
+      label: "Inventory",
+      show: isAuthenticated,
+      icon: <AiFillHome className="mr-2 w-5 h-5" />,
     },
   ];
 
@@ -47,10 +62,10 @@ export default function Navbar({ user, isLoading }) {
         className="text-xl font-bold tracking-wide flex items-center cursive"
       >
         {/* <img src="/logo.png" alt="" className="w-6 h-auto inline-block mr-2" /> */}
-        <Text> Kata Sweets</Text>
+        <p> Kata Sweets</p>
       </Link>
       <Group>
-        {isLoading ? <Loader size="xs" color="" /> : null}
+        {isAuthLoading ? <Loader size="xs" color="" /> : null}
         {navLinks
           .filter((l) => l.show)
           .map((link) => (
@@ -58,7 +73,7 @@ export default function Navbar({ user, isLoading }) {
               key={link.to}
               component={Link}
               to={link.to}
-              variant={location.pathname === link.to ? "filled" : "subtle"}
+              variant={location.pathname === link.to ? "filled" : "light"}
               color=""
             >
               {link.icon}
@@ -71,10 +86,10 @@ export default function Navbar({ user, isLoading }) {
               src=""
               alt={authUser.username}
               radius="xl"
-              className="bg--400/50"
-              color=""
+              variant="light"
+              color="orange"
             >
-              {authUser.username.charAt(0).toUpperCase()}
+              <p className=""> {authUser.username.charAt(0).toUpperCase()}</p>
             </Avatar>
             <div className="ml-2">
               <p className="text-sm font-semibold">@ {authUser.username}</p>
@@ -82,10 +97,10 @@ export default function Navbar({ user, isLoading }) {
             </div>
           </div>
         )}
-        {user && (
+        {authUser && (
           <Button
             color="red"
-            variant="outline"
+            variant="filled"
             onClick={() => {
               logoutMutation.mutate();
             }}

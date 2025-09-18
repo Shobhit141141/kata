@@ -25,7 +25,7 @@ const CustomCursor = () => {
       }}
     >
       {/* Replace with your SVG */}
-      <img src="/vite.svg" alt="" />
+      {/* <img src="/vite.svg" alt="" /> */}
     </div>
   );
 };

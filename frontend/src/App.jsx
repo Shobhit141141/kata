@@ -9,6 +9,9 @@ import { Navigate } from "react-router-dom";
 import Loader from "./components/Loader.jsx";
 import SEO from "./pages/SEO.jsx";
 import Home from "./pages/HomePage.jsx";
+import { SweetsList } from "./pages/SweetsPage.jsx";
+import { InventoryPage } from "./pages/InventoryPage.jsx";
+import { ErrorBoundary } from "./pages/ErrorBoundary.jsx";
 import CursorTrail from "./components/Cursor.jsx";
 
 function ProtectedRoute({ children }) {
@@ -26,10 +29,9 @@ function PublicRoute({ children }) {
 }
 
 function App() {
-  const { user, isLoading } = useAuthContext();
   return (
-    <>
-      <Navbar user={user} isLoading={isLoading} />
+    <ErrorBoundary>
+      <Navbar />
       <CursorTrail/>
       <SEO title="Home" description="Adding sweetness to your moments. " />
       <Container size="xl" className="py-8">
@@ -39,6 +41,22 @@ function App() {
             element={
               <ProtectedRoute>
                 <Home />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/sweets"
+            element={
+              <ProtectedRoute>
+                <SweetsList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/inventory"
+            element={
+              <ProtectedRoute>
+                <InventoryPage />
               </ProtectedRoute>
             }
           />
@@ -60,7 +78,7 @@ function App() {
           />
         </Routes>
       </Container>
-    </>
+    </ErrorBoundary>
   );
 }
 
