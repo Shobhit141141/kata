@@ -1,3 +1,4 @@
+import SweetDetailsPage from "./pages/SweetDetailsPage.jsx";
 import "./App.css";
 import { Container } from "@mantine/core";
 import { Routes, Route } from "react-router-dom";
@@ -13,6 +14,9 @@ import { SweetsList } from "./pages/SweetsPage.jsx";
 import { InventoryPage } from "./pages/InventoryPage.jsx";
 import { ErrorBoundary } from "./pages/ErrorBoundary.jsx";
 import CursorTrail from "./components/Cursor.jsx";
+import AddSweetPage from "./pages/AddSweetPage.jsx";
+import BlobBackground from "./components/Blob.jsx";
+import EditSweetPage from "./pages/EditSweetPage.jsx";
 
 function ProtectedRoute({ children }) {
   const { isLoading, isAuthenticated } = useAuthContext();
@@ -32,23 +36,42 @@ function App() {
   return (
     <ErrorBoundary>
       <Navbar />
-      <CursorTrail/>
+      <CursorTrail />
       <SEO title="Home" description="Adding sweetness to your moments. " />
-      <Container size="xl" className="py-8">
+
+      <div className="bg-orange-300/20 josefin min-h-screen z-10">
+        {/* <BlobBackground /> */}
         <Routes>
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <Home />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/" element={<Home />} />
           <Route
             path="/sweets"
             element={
               <ProtectedRoute>
                 <SweetsList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/add-sweet"
+            element={
+              <ProtectedRoute>
+                <AddSweetPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/edit-sweet/:id"
+            element={
+              <ProtectedRoute>
+                <EditSweetPage/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/sweets/:id"
+            element={
+              <ProtectedRoute>
+                <SweetDetailsPage />
               </ProtectedRoute>
             }
           />
@@ -77,7 +100,7 @@ function App() {
             }
           />
         </Routes>
-      </Container>
+      </div>
     </ErrorBoundary>
   );
 }

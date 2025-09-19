@@ -64,7 +64,7 @@ export default function LoginPage() {
     <div style={{ minHeight: '70vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <SEO title="Login Page" description="Login to your account" />
       <Paper className="max-w-md w-full p-8" shadow="md" radius="md" withBorder>
-        <Title order={2} className="mb-6 text-center">Login</Title>
+        <Title order={2} className="mb-6 text-center" style={{ fontFamily: 'Josefin Sans, sans-serif' }}>Login</Title>
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
           <TextInput
             label="Email"
@@ -74,6 +74,10 @@ export default function LoginPage() {
             onChange={handleChange}
             error={errors.email}
             required
+            styles={{
+              input: { fontFamily: 'Josefin Sans, sans-serif' },
+              label: { fontFamily: 'Josefin Sans, sans-serif' }
+            }}
           />
           <TextInput
             label="Password"
@@ -86,8 +90,12 @@ export default function LoginPage() {
             rightSection={<div onClick={() => setShowPassword(prev => !prev)} style={{ cursor: 'pointer' }}>
               {showPassword ? <LuEyeClosed size={18} /> : <LuEye size={18} />}
             </div>}
+            styles={{
+              input: { fontFamily: 'Josefin Sans, sans-serif' },
+              label: { fontFamily: 'Josefin Sans, sans-serif' }
+            }}
           />
-          <Button type="submit" fullWidth loading={mutation.isPending}>
+          <Button type="submit" fullWidth loading={mutation.isPending} style={{ fontFamily: 'Josefin Sans, sans-serif' }}>
             Login
           </Button>
         </form>

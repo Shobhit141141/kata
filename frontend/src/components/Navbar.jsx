@@ -1,10 +1,11 @@
 import { AiFillHome } from "react-icons/ai";
-import { FaPowerOff } from "react-icons/fa6";
+import { FaCookie, FaPowerOff } from "react-icons/fa6";
 import { FaUserCheck } from "react-icons/fa";
 import { FaUserPlus } from "react-icons/fa6";
+import { MdOutlineAddCircle } from "react-icons/md";
 
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Group, Button, Loader, Avatar, Text } from "@mantine/core";
+import { Group, Button, Loader, Avatar, Text, Tooltip } from "@mantine/core";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { logoutUser } from "../api/user";
 import { useAuthContext } from "../context/AuthContext";
@@ -17,6 +18,8 @@ export default function Navbar() {
     user: authUser,
     isLoading: isAuthLoading,
     isAuthenticated,
+    isAdmin,
+    tokens,
   } = useAuthContext();
   const logoutMutation = useMutation({
     mutationFn: logoutUser,
@@ -25,8 +28,6 @@ export default function Navbar() {
       navigate("/login");
     },
   });
-
-  
 
   const navLinks = [
     {
@@ -50,13 +51,19 @@ export default function Navbar() {
     {
       to: "/inventory",
       label: "Inventory",
-      show: isAuthenticated,
+      show: isAuthenticated && isAdmin,
       icon: <AiFillHome className="mr-2 w-5 h-5" />,
+    },
+    {
+      to: "/add-sweet",
+      label: "Add Sweet",
+      show: isAuthenticated && isAdmin,
+      icon: <MdOutlineAddCircle className="mr-2 w-5 h-5" />,
     },
   ];
 
   return (
-    <nav className="w-full px-6 py-3 flex items-center justify-between shadow">
+    <nav className="w-full fixed h-16 px-6 py-3 flex items-center justify-between backdrop-blur-md shadow-md z-50 josefin bg-white">
       <Link
         to="/"
         className="text-xl font-bold tracking-wide flex items-center cursive"
@@ -65,7 +72,6 @@ export default function Navbar() {
         <p> Kata Sweets</p>
       </Link>
       <Group>
-        {isAuthLoading ? <Loader size="xs" color="" /> : null}
         {navLinks
           .filter((l) => l.show)
           .map((link) => (
@@ -95,11 +101,22 @@ export default function Navbar() {
               <p className="text-sm font-semibold">@ {authUser.username}</p>
               <p className="text-xs">{authUser.email}</p>
             </div>
+            <Tooltip
+              label={`${tokens} Tokens | 1 token = ₹ 100`}
+              
+              withArrow
+              multiline
+            >
+              <div className="ml-4 flex items-center bg-pink-200 rounded-md px-3 gap-1 py-2 text-pink-600 cursor-pointer">
+                <FaCookie />
+                <p className="text-sm font-semibold">{tokens}</p>
+              </div>
+            </Tooltip>
           </div>
         )}
         {authUser && (
           <Button
-            color="red"
+            color="red.7"
             variant="filled"
             onClick={() => {
               logoutMutation.mutate();

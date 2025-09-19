@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { Alert } from "@mantine/core";
+import { Alert, Button } from "@mantine/core";
 import { GoAlertFill } from "react-icons/go";
 
 export class ErrorBoundary extends Component {
@@ -14,24 +14,39 @@ export class ErrorBoundary extends Component {
 
   componentDidCatch(error, errorInfo) {}
 
-   getCleanStack(error) {
+  getCleanStack(error) {
     if (!error?.stack) return null;
     const lines = error.stack.split("\n");
     return [lines[0], lines[1]?.trim()].filter(Boolean).join("\n");
   }
 
-
   render() {
     if (this.state.hasError) {
       return (
         <div className="w-screen h-screen flex items-center justify-center">
-          <Alert color="red" variant={"light"} className="w-[400px]" title="An error occurred" icon={<GoAlertFill />}>
-            {this.state.error?.message || "Something went wrong."}
-            {this.getCleanStack(this.state.error) && (
-              <pre className="mt-2 text-xs whitespace-pre-wrap">
-                {this.getCleanStack(this.state.error)}
-              </pre>
-            )}
+          <Alert
+        color="red"
+        variant="light"
+        className="w-[400px]"
+        title="An error occurred"
+        icon={<GoAlertFill />}
+          >
+        {this.state.error?.message || "Something went wrong."}
+        {this.getCleanStack(this.state.error) && (
+          <pre className="mt-2 text-xs whitespace-pre-wrap">
+            {this.getCleanStack(this.state.error)}
+          </pre>
+        )}
+        <Button
+          onClick={() => {
+            this.setState({ hasError: false, error: null });
+          }}
+          color="red"
+          variant="filled"
+          mt={20}
+        >
+          Try Again
+        </Button>
           </Alert>
         </div>
       );

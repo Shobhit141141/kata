@@ -1,2 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Lora:ital,wght@0,400..700;1,400..700&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Lora:ital,wght@0,400..700;1,400..700&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+.cinzel {
+  font-family: 'Cinzel', serif;
+}
+.cormorant {
+  font-family: 'Cormorant Garamond', serif;
+}
+.crimson {
+  font-family: 'Crimson Text', serif;
+}
+.lora {
+  font-family: 'Lora', serif;
+}
+.merriweather {
+  font-family: 'Merriweather', serif;
+}
+.playfair {
+  font-family: 'Playfair Display', serif;
+}
+.josefin {
+  font-family: 'Josefin Sans', sans-serif;
+}
+.raleway {
+  font-family: 'Raleway', sans-serif;
+}

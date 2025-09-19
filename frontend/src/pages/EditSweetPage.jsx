@@ -1,0 +1,31 @@
+import { useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { fetchSweetById } from "../api/sweets";
+import SweetForm from "../components/SweetForm";
+import { Loader } from "@mantine/core";
+
+export default function EditSweetPage() {
+  const { id } = useParams();
+
+  const { data, error, isPending } = useQuery({
+    queryKey: ["sweet", id],
+    queryFn: () => fetchSweetById(id),
+  });
+
+  if (isPending) return <Loader />;
+  if (error) {
+    return (
+      <div>
+        <h2>Error Loading Sweet</h2>
+        <p>{error.message}</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="pt-18 px-10 max-w-md mx-auto">
+      <h2 className="text-4xl font-bold mt-4 mb-8">Edit sweet</h2>
+      <SweetForm sweet={data.sweet} />
+    </div>
+  );
+}

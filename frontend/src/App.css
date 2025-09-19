@@ -1,4 +1,14 @@
 * {
   scrollbar-width: thin;
-  font-family: "Cinzel", serif;
+  font-family: 'Josefin Sans', sans-serif;
+}
+
+label {
+  font-family: 'Josefin Sans', sans-serif;
+}
+
+.mantine-TextInput-input,
+.mantine-Textarea-input,
+.mantine-Select-input {
+  font-family: 'Josefin Sans', sans-serif !important;
 }

@@ -6,14 +6,13 @@ import {
   NumberInput,
   Modal,
   Loader,
-  Notification,
   Card,
   Title,
   Container,
   Stack,
 } from "@mantine/core";
 import { useState } from "react";
-import { purchaseSweet, restockSweet } from "../api/inventory";
+import { restockSweet } from "../api/inventory";
 import { fetchSweets } from "../api/sweets";
 import { toast } from "react-toastify";
 
@@ -27,16 +26,7 @@ export function InventoryPage() {
 
   const [restockModal, setRestockModal] = useState(null);
 
-  const purchaseMutation = useMutation({
-    mutationFn: purchaseSweet,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["sweets"] });
-      toast.success("Sweet purchased successfully!");
-    },
-    onError: (err) => {
-      toast.error(err.message || "Unable to purchase sweet.");
-    },
-  });
+ 
 
   const restockMutation = useMutation({
     mutationFn: ({ id, amount }) => restockSweet(id, amount),
@@ -59,15 +49,14 @@ export function InventoryPage() {
   }
 
   if (error) {
-    return (
-      <Notification color="red" title="Error">
-        {error.message}
-      </Notification>
-    );
+    return <div>
+      <h2>Error Loading Inventory</h2>
+      <p>{error.message}</p>
+    </div>;
   }
 
   return (
-    <Container size="lg" mt="xl">
+    <div className="max-w-5xl mx-auto p-4">
       <Card shadow="md" radius="lg" p="xl" withBorder>
         <Stack>
           <Title
@@ -128,7 +117,7 @@ export function InventoryPage() {
           loading={restockMutation.isLoading}
         />
       )}
-    </Container>
+    </div>
   );
 }
 
