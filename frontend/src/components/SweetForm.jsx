@@ -24,6 +24,7 @@ export default function SweetForm({ sweet, onSuccess }) {
     setValue,
     watch,
     reset,
+    register,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -32,7 +33,8 @@ export default function SweetForm({ sweet, onSuccess }) {
       category: sweet?.category || "",
       price: sweet?.price || null,
       quantity: sweet?.quantity || null,
-      image: null,
+      imageUrl: sweet?.imageUrl || null,
+
     },
   });
 
@@ -172,11 +174,7 @@ export default function SweetForm({ sweet, onSuccess }) {
       <Controller
         name="image"
         control={control}
-        rules={
-          !isEdit
-            ? { required: "Image is required" }
-            : {}
-        }
+        rules={!isEdit ? { required: "Image is required" } : {}}
         render={({ field }) => (
           <FileInput
             label="Image"
@@ -191,20 +189,41 @@ export default function SweetForm({ sweet, onSuccess }) {
         )}
       />
 
-      {image && (
+      {(image || (isEdit && sweet?.imageUrl)) && (
         <>
-          <Button
-            color="red"
-            onClick={() => setValue("image", null)}
-            size="sm"
-            mb={4}
-          >
-            Clear Image
-          </Button>
+          {image ? (
+            <div className="flex flex-wrap mt-2 relative w-full aspect-4/3 bg-white rounded-xl shadow-md overflow-hidden">
+              <img
+                src={URL.createObjectURL(image)}
+                alt="Preview"
+                className="object-cover w-full h-full"
+              />
+            </div>
+          ) : (
+            <div className="flex flex-wrap mt-2 relative w-full aspect-4/3 bg-white rounded-xl shadow-md overflow-hidden">
+              <img
+                src={sweet.imageUrl}
+                alt="Current"
+                className="object-cover w-full h-full"
+              />
+            </div>
+          )}
 
-          <div className="flex flex-wrap mt-2 mb-4 relative bg-white rounded-xl shadow-md">
-            <img src={URL.createObjectURL(image)} alt="Preview" />
-          </div>
+          {image && (
+            <Button
+              color="red"
+              onClick={() => setValue("image", null)}
+              size="sm"
+              mb={4}
+            >
+              Clear Image
+            </Button>
+          )}
+
+          <p className="text-sm text-orange-500">
+            The image will be in this aspect ratio: 4:3 <br /> 
+            {isEdit && "Uploading a new image will replace the current one."}
+          </p>
         </>
       )}
 

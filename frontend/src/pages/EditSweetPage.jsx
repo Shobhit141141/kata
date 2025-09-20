@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchSweetById } from "../api/sweets";
 import SweetForm from "../components/SweetForm";
 import { Loader } from "@mantine/core";
+import {motion} from 'framer-motion'
 
 export default function EditSweetPage() {
   const { id } = useParams();
@@ -23,9 +24,14 @@ export default function EditSweetPage() {
   }
 
   return (
-    <div className="pt-18 px-10 max-w-md mx-auto">
+    <motion.div className="pt-18 px-10 max-w-md mx-auto"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      
+    >
       <h2 className="text-4xl font-bold mt-4 mb-8">Edit sweet</h2>
       <SweetForm sweet={data.sweet} />
-    </div>
+    </motion.div>
   );
 }

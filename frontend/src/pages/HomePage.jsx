@@ -3,6 +3,8 @@ import Lenis from "@studio-freight/lenis";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion } from "framer-motion";
+import SweetSlider from "../components/Carousel";
+
 gsap.registerPlugin(ScrollTrigger);
 
 function Home() {
@@ -53,8 +55,8 @@ function Home() {
       const images = imagesRef.current.querySelectorAll("img");
       images.forEach((img) => {
         gsap.to(img, {
-          x: (img.offsetLeft - imagesRef.current.offsetWidth / 2) * 0.4,
-          y: (img.offsetTop - imagesRef.current.offsetHeight / 2) * 0.4,
+          x: (img.offsetLeft - imagesRef.current.offsetWidth / 2) * 0.2,
+          y: (img.offsetTop - imagesRef.current.offsetHeight / 2) * 0.2,
           scale: 1.1,
           ease: "none",
           scrollTrigger: {
@@ -74,13 +76,18 @@ function Home() {
   }, []);
 
   return (
-    <div className="bg-orange-100/10 ">
+    <motion.div className="bg-orange-100/10 "
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    transition={{ duration: 0.5 }}
+    >
       {/* header section */}
-      <header className=" pt-16 relative min-h-screen flex flex-col items-center justify-center text-center">
+      <header className=" pt-16 relative min-h-screen flex flex-col items-center justify-center text-center ">
         {/* floating sweets */}
         <div
           ref={imagesRef}
-          className="absolute inset-0 pointer-events-none z-0"
+          className="absolute inset-0 pointer-events-none z-0 overflow-y-hidden"
         >
           {images.map((img, i) => (
             <motion.img
@@ -88,13 +95,17 @@ function Home() {
               src={img.src}
               alt={img.alt}
               className={img.className}
-              
             />
           ))}
         </div>
 
         {/* main text */}
-        <div className="relative z-10 px-4 josefin -translate-y-20">
+        <motion.div
+          className="relative z-10 px-4 josefin -translate-y-20"
+          initial={{ opacity: 0, y: 20, filter: "blur(10px)" }}
+          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ duration: 0.6 }}
+        >
           <h1 className="text-8xl  font-bold relative z-10 ">
             Welcome to
             <br />
@@ -107,24 +118,13 @@ function Home() {
           <button className="mt-2 px-6 py-3 bg-orange-500 text-white rounded-full text-lg font-semibold hover:bg-orange-600 transition cursor-pointer">
             Try Now
           </button>
-        </div>
+        </motion.div>
       </header>
 
-      {/* content below to test scroll */}
-      <section className="max-w-3xl mx-auto px-6 py-20 text-lg leading-relaxed text-gray-700">
-        <h2 className="text-3xl font-semibold mb-6">More Content</h2>
-        <p className="mb-6">
-          Scroll down to see the sweets slightly move & scale while you leave
-          the header section.
-        </p>
-        {[...Array(8)].map((_, i) => (
-          <p key={i} className="mb-6">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officia
-            pariatur facilis facere mollitia delectus?
-          </p>
-        ))}
-      </section>
-    </div>
+      <SweetSlider />
+
+     
+    </motion.div>
   );
 }
 

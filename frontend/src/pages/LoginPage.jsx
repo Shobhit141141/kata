@@ -61,7 +61,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div style={{ minHeight: '70vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <SEO title="Login Page" description="Login to your account" />
       <Paper className="max-w-md w-full p-8" shadow="md" radius="md" withBorder>
         <Title order={2} className="mb-6 text-center" style={{ fontFamily: 'Josefin Sans, sans-serif' }}>Login</Title>

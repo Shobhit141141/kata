@@ -1,6 +1,7 @@
 * {
-  scrollbar-width: thin;
+  scrollbar-width: none;
   font-family: 'Josefin Sans', sans-serif;
+
 }
 
 label {
@@ -11,4 +12,8 @@ label {
 .mantine-Textarea-input,
 .mantine-Select-input {
   font-family: 'Josefin Sans', sans-serif !important;
+}
+
+body {
+  overflow-x: hidden;
 }

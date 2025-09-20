@@ -17,6 +17,7 @@ import CursorTrail from "./components/Cursor.jsx";
 import AddSweetPage from "./pages/AddSweetPage.jsx";
 import BlobBackground from "./components/Blob.jsx";
 import EditSweetPage from "./pages/EditSweetPage.jsx";
+import SweetQuiz from "./pages/Quiz.jsx";
 
 function ProtectedRoute({ children }) {
   const { isLoading, isAuthenticated } = useAuthContext();
@@ -80,6 +81,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <InventoryPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route 
+            path="/quiz"
+            element={
+              <ProtectedRoute>
+                <SweetQuiz />
               </ProtectedRoute>
             }
           />

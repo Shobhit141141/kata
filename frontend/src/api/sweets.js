@@ -20,6 +20,28 @@ export const fetchSweetById = async (id) => {
   return await res.json();
 };
 
+export const searchSweets = async (query) => {
+  const res = await fetch(`${API_URL}/sweets/search?${query}`, {
+    credentials: "include",
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.message || "Failed to search sweets");
+  }
+  return await res.json();
+}
+
+export const fetchRecommendedSweets = async (exceptSweetId) => {
+  const res = await fetch(`${API_URL}/sweets/recommended?exceptSweetId=${exceptSweetId}`, {
+    credentials: "include",
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.message || "Failed to fetch recommended sweets");
+  }
+  return await res.json();
+};
+
 export const createSweet = async (formData) => {
   const res = await fetch(`${API_URL}/sweets`, {
     method: "POST",
@@ -37,7 +59,7 @@ export const updateSweet = async (id, data) => {
   const res = await fetch(`${API_URL}/sweets/${id}`, {
     method: "PUT",
     credentials: "include",
-    body: data, // FormData
+    body: data,
   });
   if (!res.ok) {
     const err = await res.json();

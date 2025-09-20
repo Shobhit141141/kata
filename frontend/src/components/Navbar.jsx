@@ -2,7 +2,7 @@ import { AiFillHome } from "react-icons/ai";
 import { FaCookie, FaPowerOff } from "react-icons/fa6";
 import { FaUserCheck } from "react-icons/fa";
 import { FaUserPlus } from "react-icons/fa6";
-import { MdOutlineAddCircle } from "react-icons/md";
+import { MdInventory, MdOutlineAddCircle } from "react-icons/md";
 
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Group, Button, Loader, Avatar, Text, Tooltip } from "@mantine/core";
@@ -52,7 +52,7 @@ export default function Navbar() {
       to: "/inventory",
       label: "Inventory",
       show: isAuthenticated && isAdmin,
-      icon: <AiFillHome className="mr-2 w-5 h-5" />,
+      icon: <MdInventory className="mr-2 w-5 h-5" />,
     },
     {
       to: "/add-sweet",
@@ -88,7 +88,7 @@ export default function Navbar() {
           ))}
         {!isAuthLoading && isAuthenticated && authUser && (
           <div className=" flex flex-row items-center">
-            <Avatar
+            {/* <Avatar
               src=""
               alt={authUser.username}
               radius="xl"
@@ -96,14 +96,9 @@ export default function Navbar() {
               color="orange"
             >
               <p className=""> {authUser.username.charAt(0).toUpperCase()}</p>
-            </Avatar>
-            <div className="ml-2">
-              <p className="text-sm font-semibold">@ {authUser.username}</p>
-              <p className="text-xs">{authUser.email}</p>
-            </div>
+            </Avatar> */}
             <Tooltip
               label={`${tokens} Tokens | 1 token = ₹ 100`}
-              
               withArrow
               multiline
             >
@@ -112,6 +107,10 @@ export default function Navbar() {
                 <p className="text-sm font-semibold">{tokens}</p>
               </div>
             </Tooltip>
+            <div className="ml-2">
+              <p className="text-sm font-semibold">@{authUser.username}</p>
+              <p className="text-xs text-gray-500">{authUser.email}</p>
+            </div>
           </div>
         )}
         {authUser && (

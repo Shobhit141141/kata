@@ -1,13 +1,17 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchSweetById, deleteSweet } from "../api/sweets";
+import {
+  fetchSweetById,
+  deleteSweet,
+  fetchRecommendedSweets,
+} from "../api/sweets";
 import { Loader, Button, Group, Badge, Notification } from "@mantine/core";
 import PurchaseModal from "../components/PurchaseModal";
 import { toast } from "react-toastify";
 import { useAuthContext } from "../context/AuthContext";
 import { purchaseSweet } from "../api/inventory";
 import { useEffect, useState } from "react";
-
+import { motion } from "framer-motion";
 function getRandomStockHeadline(quantity) {
   const headlines = {
     plenty: [
@@ -53,6 +57,11 @@ export default function SweetDetailsPage() {
     queryFn: () => fetchSweetById(id),
   });
 
+  const { data: recommendedSweets } = useQuery({
+    queryKey: ["recommendedSweets", id],
+    queryFn: () => fetchRecommendedSweets(id),
+  });
+
   const {
     user: authUser,
     isLoading: isAuthLoading,
@@ -95,11 +104,10 @@ export default function SweetDetailsPage() {
   const sweet = localSweet || data?.sweet;
 
   useEffect(() => {
-  if (sweet) {
-    setStockHeadline(getRandomStockHeadline(sweet.quantity));
-  }
-}, [sweet?.quantity]);
-
+    if (sweet) {
+      setStockHeadline(getRandomStockHeadline(sweet.quantity));
+    }
+  }, [sweet?.quantity]);
 
   if (isPending) return <Loader />;
   if (error instanceof Error)
@@ -107,22 +115,31 @@ export default function SweetDetailsPage() {
 
   if (!sweet) return <Notification color="red">Sweet not found</Notification>;
 
-  let stockColor = "bg-red-400 border-red-400 text-white";
-  let stockText = <>Out of Stock</>;
-  let stockStatus = "Out of Stock";
-  if (sweet.quantity > 0 && sweet.quantity < 20) {
-    stockColor = "bg-amber-500 border-amber-500 text-white";
-    stockText = <>{sweet.quantity} Kg left</>;
-    stockStatus = "Limited Stock";
-  } else if (sweet.quantity >= 20) {
-    stockColor = "bg-green-500 border-green-500 text-white";
-    stockText = <>{sweet.quantity} Kg left</>;
-    stockStatus = "In Stock";
+  function getStockStatus(quantity) {
+    let stockColor = "bg-red-400 border-red-400 text-white";
+    let stockText = <>Out of Stock</>;
+    let stockStatus = "Out of Stock";
+    if (quantity > 0 && quantity < 20) {
+      stockColor = "bg-amber-500 border-amber-500 text-white";
+      stockText = <>{quantity} Kg left</>;
+      stockStatus = "Limited Stock";
+    } else if (quantity >= 20) {
+      stockColor = "bg-green-500 border-green-500 text-white";
+      stockText = <>{quantity} Kg left</>;
+      stockStatus = "In Stock";
+    }
+
+    return { stockColor, stockText, stockStatus };
   }
 
   return (
-    <div className="pt-18 pb-10 min-h-screen relative flex justify-center items-start">
-      <div className="max-w-2xl mx-auto px-6 rounded-xl shadow-lg p-8 bg-white">
+    <motion.div
+      className="pt-20 pb-10 min-h-screen relative flex justify-center items-start px-10 gap-4 w-full mx-auto"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <div className="w-[60%] px-6 rounded-xl shadow-lg p-8 bg-white">
         <div className="flex items-stretch justify-between">
           {/* Left Section */}
           <img
@@ -141,7 +158,7 @@ export default function SweetDetailsPage() {
                   {sweet.category}
                 </Badge>
               </div>
-              <h4 className="text-gray-500 text-lg">{sweet.description}</h4>
+              <h4 className="text-gray-500 text-md">{sweet.description}</h4>
             </div>
 
             {/* Price and Stock */}
@@ -150,9 +167,11 @@ export default function SweetDetailsPage() {
                 ₹{sweet.price} <span className="text-xl font-normal">/kg</span>
               </p>
               <div
-                className={`inline-flex items-center border-2 rounded-sm px-2 text-sm font-bold ${stockColor} mb-2`}
+                className={`inline-flex items-center border-2 rounded-sm px-2 text-sm font-bold ${
+                  getStockStatus(sweet.quantity).stockColor
+                } mb-2`}
               >
-                {stockText}
+                {getStockStatus(sweet.quantity).stockText}
               </div>
             </div>
           </div>
@@ -196,7 +215,61 @@ export default function SweetDetailsPage() {
             />
           </div>
         )}
+
+        <div className="mt-6">
+          <h3 className="text-2xl font-bold mb-4">
+            Fun fact about {sweet.name}
+          </h3>
+          <p className="text-gray-700 text-md">
+            {sweet.funFact || "No fun fact available."}
+          </p>
+        </div>
       </div>
-    </div>
+
+      <div className=" w-[40%] rounded-xl shadow-lg p-8 bg-white">
+        <h3 className="text-2xl font-bold mb-4">Try These Sweets too.</h3>
+        {recommendedSweets?.sweets?.length === 0 && (
+          <p>No recommended sweets found.</p>
+        )}
+        <div className="flex flex-col gap-2 items-center">
+          {recommendedSweets?.sweets?.map((sweet) => (
+            <div
+              key={sweet._id}
+              className="rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition text-black cursor-pointer flex items-center gap-2 "
+              onClick={() => navigate(`/sweets/${sweet._id}`)}
+            >
+              <img
+                src={sweet.imageUrl}
+                alt={sweet.name}
+                className="aspect-[4/3] object-cover w-1/3 bg-orange-500"
+              />
+
+              <div className="flex items-center justify-between w-full">
+                <div className="p-2 flex flex-col items-start gap-4 justify-start">
+                  <h2 className="text-lg font-semibold">{sweet.name}</h2>
+                  <Badge color="pink" variant="light">
+                    {sweet.category}
+                  </Badge>
+                </div>
+
+                <div className="p-2 flex flex-col items-end gap-4 justify-start">
+                  <h2 className="text-lg font-semibold">
+                    ₹{sweet.price}{" "}
+                    <span className="text-sm font-normal">/kg</span>
+                  </h2>
+                  <div
+                    className={`inline-flex items-center border-2 rounded-sm px-2 text-xs font-bold ${
+                      getStockStatus(sweet.quantity).stockColor
+                    } mb-2`}
+                  >
+                    {getStockStatus(sweet.quantity).stockText}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </motion.div>
   );
 }
