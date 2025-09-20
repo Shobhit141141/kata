@@ -13,7 +13,6 @@ const AuthContext = createContext(undefined);
 export function AuthProvider({ children }) {
   const auth = useAuth();
   const [tokens, setTokens] = useState(auth.data?.tokens || 0);
-  console.log("AuthProvider render", auth.data);
   useEffect(() => {
     if (auth.data?.tokens !== undefined) setTokens(auth.data.tokens);
   }, [auth.data?.tokens]);

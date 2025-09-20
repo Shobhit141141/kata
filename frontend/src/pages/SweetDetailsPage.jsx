@@ -13,6 +13,7 @@ import { useAuthContext } from "../context/AuthContext";
 import { purchaseSweet } from "../api/inventory";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import SEO from "./SEO";
 function getRandomStockHeadline(quantity) {
   const headlines = {
     plenty: [
@@ -146,10 +147,11 @@ export default function SweetDetailsPage() {
   return (
     <motion.div
       className="pt-20 pb-10 min-h-screen relative flex max-sm:flex-col justify-center items-start px-10 gap-4 w-full mx-auto"
-      // initial={{ opacity: 0 }}
-      // animate={{ opacity: 1 }}
-      // exit={{ opacity: 0 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
     >
+      <SEO title={sweet ? sweet.name : "Sweet Details"} description={sweet ? sweet.description : "Details of the sweet"} image={sweet ? sweet.imageUrl : "/logo.png"} />
       <div className="w-full md:w-[60%] px-6 rounded-xl shadow-lg p-8 bg-white">
         <div className="flex max-sm:flex-col items-stretch justify-between">
           {/* Left Section */}

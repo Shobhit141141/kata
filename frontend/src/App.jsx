@@ -38,7 +38,6 @@ function App() {
     <ErrorBoundary>
       <Navbar />
       <CursorTrail />
-      <SEO title="Home" description="Adding sweetness to your moments. " />
 
       <div className="josefin min-h-screen z-10">
         {/* <BlobBackground /> */}

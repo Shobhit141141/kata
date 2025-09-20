@@ -11,6 +11,7 @@ import {
 } from "react-icons/fa";
 import questions from "../data/quiz";
 import ConfettiExplosion from "react-confetti-explosion";
+import SEO from "./SEO";
 
 export default function SweetQuiz() {
   const [step, setStep] = useState(0);
@@ -103,6 +104,8 @@ export default function SweetQuiz() {
   if (!started) {
   return (
     <div className="h-screen bg-gradient-to-br from-pink-50 via-orange-50 to-yellow-50 p-6 flex flex-col justify-center items-center">
+      <SEO title="Quiz" description="Take the sweet quiz" image="/logo.png" />
+
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -191,6 +194,7 @@ export default function SweetQuiz() {
 
   return (
     <div className="h-screen pt-20 bg-gradient-to-br from-pink-50 via-orange-50 to-yellow-50 p-6 flex items-center justify-center">
+      <SEO title="Quiz" description="Take the sweet quiz" image="/logo.png" />
       <div className="max-w-lg w-full">
         {/* Progress Bar */}
         <div className="mb-6">

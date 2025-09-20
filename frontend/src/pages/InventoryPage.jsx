@@ -21,6 +21,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { SweetFilters } from "../components/SweetFilters";
+import SEO from "./SEO";
 export function InventoryPage() {
   const queryClient = useQueryClient();
 
@@ -76,6 +77,7 @@ export function InventoryPage() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
     >
+      <SEO title="Inventory" description="Manage your sweet inventory" image="/logo.png" />
       <Paper shadow="sm" radius="lg" p="lg" withBorder>
         <h2 className="text-4xl font-bold mt-4 mb-8 text-center">Inventory</h2>
 

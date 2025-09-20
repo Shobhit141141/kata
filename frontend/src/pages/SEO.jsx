@@ -1,9 +1,9 @@
 import { Helmet } from "react-helmet-async";
 
 function SEO({ title, description, image }) {
-  const siteTitle = "Frontend";
-  const defaultDescription = "...";
-  const defaultImage = "/vite.svg";
+  const siteTitle = "Kata Sweets";
+  const defaultDescription = "Welcome to Kata Sweets";
+  const defaultImage = "/logo.png";
 
   return (
     <Helmet>

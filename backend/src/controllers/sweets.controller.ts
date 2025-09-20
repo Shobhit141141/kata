@@ -9,8 +9,6 @@ import { getGeminiResponse } from '../services/gemini.js';
 export const addSweet = async (req: MulterRequest, res: Response) => {
   try {
     const { name, description, category, price, quantity } = req.body;
-
-    console.log('Received data:', { name, description, category, price, quantity });
     if (!name || !description || !category || !price || !quantity) {
       return res.status(400).json({ success: false, message: 'Some fields are missing' });
     }
@@ -29,10 +27,6 @@ export const addSweet = async (req: MulterRequest, res: Response) => {
       imageUrl = result.secure_url;
       imagePublicId = result.public_id;
     }
-
-    logger.debug('Adding sweet with image URL:', imageUrl);
-    logger.info('Image URL:', imageUrl);
-    console.log('Image URL:', imageUrl);
 
     const sweet = await Sweet.create({
       name,

@@ -1,18 +1,30 @@
-import React, { useState, useMemo } from 'react';
-import { useMutation } from '@tanstack/react-query';
-import { registerUser, userNameAlreadyTaken } from '../api/user';
-import { Button, TextInput, Paper, Title, Progress, Box, Text, ThemeIcon, List, Loader, ActionIcon } from '@mantine/core';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { FaCheck, FaCircleCheck } from 'react-icons/fa6';
-import { FaTimes, FaTimesCircle } from 'react-icons/fa';
-import { useRef } from 'react';
-import { useAuthContext } from '../context/AuthContext';
-import SEO from './SEO';
+import React, { useState, useMemo } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { registerUser, userNameAlreadyTaken } from "../api/user";
+import {
+  Button,
+  TextInput,
+  Paper,
+  Title,
+  Progress,
+  Box,
+  Text,
+  ThemeIcon,
+  List,
+  Loader,
+  ActionIcon,
+} from "@mantine/core";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { FaCheck, FaCircleCheck } from "react-icons/fa6";
+import { FaTimes, FaTimesCircle } from "react-icons/fa";
+import { useRef } from "react";
+import { useAuthContext } from "../context/AuthContext";
+import SEO from "./SEO";
 import { LuEye, LuEyeClosed } from "react-icons/lu";
 
 export default function RegisterPage() {
-  const [form, setForm] = useState({ username: '', email: '', password: '' });
+  const [form, setForm] = useState({ username: "", email: "", password: "" });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
@@ -21,15 +33,15 @@ export default function RegisterPage() {
     mutationFn: registerUser,
     onSuccess: () => {
       refetch();
-      toast.success('Registration successful');
-      navigate('/');
+      toast.success("Registration successful");
+      navigate("/");
     },
     onError: (err) => {
-      toast.error(err?.message || 'Registration failed');
+      toast.error(err?.message || "Registration failed");
     },
   });
 
-  const [usernameStatus, setUsernameStatus] = useState('');
+  const [usernameStatus, setUsernameStatus] = useState("");
   const debounceRef = useRef();
   const passwordStrength = useMemo(() => {
     if (!form.password) return 0;
@@ -38,16 +50,17 @@ export default function RegisterPage() {
     if (form.password.length >= 8) strength += 25;
     if (/[A-Z]/.test(form.password)) strength += 25;
     if (/[a-z]/.test(form.password)) strength += 25;
-    if (/[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(form.password)) strength += 25;
+    if (/[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(form.password))
+      strength += 25;
 
     return strength;
   }, [form.password]);
 
   const getStrengthColor = () => {
-    if (passwordStrength <= 25) return 'red';
-    if (passwordStrength <= 50) return 'orange';
-    if (passwordStrength <= 75) return 'yellow';
-    return 'green';
+    if (passwordStrength <= 25) return "red";
+    if (passwordStrength <= 50) return "orange";
+    if (passwordStrength <= 75) return "yellow";
+    return "green";
   };
 
   const passwordRequirements = useMemo(() => {
@@ -55,7 +68,9 @@ export default function RegisterPage() {
       hasMinLength: form.password.length >= 8,
       hasUpperCase: /[A-Z]/.test(form.password),
       hasLowerCase: /[a-z]/.test(form.password),
-      hasNumberOrSymbol: /[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(form.password),
+      hasNumberOrSymbol: /[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(
+        form.password
+      ),
     };
   }, [form.password]);
 
@@ -63,57 +78,57 @@ export default function RegisterPage() {
     const newErrors = {};
 
     if (!form.username.trim()) {
-      newErrors.username = 'Username is required';
+      newErrors.username = "Username is required";
     }
 
     if (!form.email) {
-      newErrors.email = 'Email is required';
+      newErrors.email = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-      newErrors.email = 'Invalid email address';
+      newErrors.email = "Invalid email address";
     }
 
     if (!form.password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = "Password is required";
     } else if (passwordStrength < 100) {
-      newErrors.password = 'Password does not meet all requirements';
-
-
+      newErrors.password = "Password does not meet all requirements";
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
+    setForm((prev) => ({ ...prev, [name]: value }));
 
     if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
-    if (name === 'username') {
-      setUsernameStatus('');
+    if (name === "username") {
+      setUsernameStatus("");
       if (debounceRef.current) clearTimeout(debounceRef.current);
       if (!value.trim()) return;
 
-      setUsernameStatus('checking');
+      setUsernameStatus("checking");
       debounceRef.current = setTimeout(async () => {
         try {
           await userNameAlreadyTaken(value.trim());
-          setUsernameStatus('available');
+          setUsernameStatus("available");
         } catch (err) {
           if (err?.response?.status === 409) {
-            setUsernameStatus('taken');
+            setUsernameStatus("taken");
           } else {
-            setUsernameStatus('error');
+            setUsernameStatus("error");
           }
         }
       }, 500);
-    } else if (name === 'password') {
+    } else if (name === "password") {
       if (/\s/.test(value)) {
-        setErrors(prev => ({ ...prev, password: 'Password cannot contain spaces' }));
-        setForm(prev => ({ ...prev, password: value.replace(/\s/g, '') }));
+        setErrors((prev) => ({
+          ...prev,
+          password: "Password cannot contain spaces",
+        }));
+        setForm((prev) => ({ ...prev, password: value.replace(/\s/g, "") }));
       }
     }
   };
@@ -126,10 +141,25 @@ export default function RegisterPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "20px",
+      }}
+    >
       <SEO title="Register Page" description="Create a new account" />
-      <Paper className="max-w-md w-full mx-auto mt-12 p-8" shadow="md" radius="md" withBorder>
-        <Title order={2} className="mb-6 text-center">Register</Title>
+      <Paper
+        className="max-w-md w-full mx-auto mt-12 p-8"
+        shadow="md"
+        radius="md"
+        withBorder
+      >
+        <Title order={2} className="mb-6 text-center">
+          Register
+        </Title>
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
           <TextInput
             label="Username"
@@ -138,7 +168,15 @@ export default function RegisterPage() {
             onChange={handleChange}
             error={errors.username}
             required
-            rightSection={usernameStatus === 'checking' ? <Loader size="xs" /> : usernameStatus === 'taken' ? <FaTimesCircle color='red' /> : usernameStatus === 'available' ? <FaCircleCheck color="green" /> : null}
+            rightSection={
+              usernameStatus === "checking" ? (
+                <Loader size="xs" />
+              ) : usernameStatus === "taken" ? (
+                <FaTimesCircle color="red" />
+              ) : usernameStatus === "available" ? (
+                <FaCircleCheck color="green" />
+              ) : null
+            }
           />
           <TextInput
             label="Email"
@@ -157,14 +195,18 @@ export default function RegisterPage() {
             onChange={handleChange}
             error={errors.password}
             required
-            rightSection={<div onClick={() => setShowPassword(prev => !prev)} style={{ cursor: 'pointer' }}>
-              {showPassword ? <LuEyeClosed size={18} /> : <LuEye size={18} />}
-            </div>}
+            rightSection={
+              <div
+                onClick={() => setShowPassword((prev) => !prev)}
+                style={{ cursor: "pointer" }}
+              >
+                {showPassword ? <LuEyeClosed size={18} /> : <LuEye size={18} />}
+              </div>
+            }
           />
 
           {form.password && (
             <Box mt="sm">
-
               <Text size="sm" mb={5}>
                 Password strength
               </Text>
@@ -180,10 +222,17 @@ export default function RegisterPage() {
                     <div
                       size="sm"
                       radius="xl"
-                      className={`${passwordRequirements.hasMinLength ? "text-green-500" : "text-red-500"
-                        }`}
+                      className={`${
+                        passwordRequirements.hasMinLength
+                          ? "text-green-500"
+                          : "text-red-500"
+                      }`}
                     >
-                      {passwordRequirements.hasMinLength ? <FaCheck /> : <FaTimes />}
+                      {passwordRequirements.hasMinLength ? (
+                        <FaCheck />
+                      ) : (
+                        <FaTimes />
+                      )}
                     </div>
                   }
                 >
@@ -195,10 +244,17 @@ export default function RegisterPage() {
                     <div
                       size="sm"
                       radius="xl"
-                      className={`${passwordRequirements.hasUpperCase ? "text-green-500" : "text-red-500"
-                        }`}
+                      className={`${
+                        passwordRequirements.hasUpperCase
+                          ? "text-green-500"
+                          : "text-red-500"
+                      }`}
                     >
-                      {passwordRequirements.hasUpperCase ? <FaCheck /> : <FaTimes />}
+                      {passwordRequirements.hasUpperCase ? (
+                        <FaCheck />
+                      ) : (
+                        <FaTimes />
+                      )}
                     </div>
                   }
                 >
@@ -210,10 +266,17 @@ export default function RegisterPage() {
                     <div
                       size="sm"
                       radius="xl"
-                      className={`${passwordRequirements.hasLowerCase ? "text-green-500" : "text-red-500"
-                        }`}
+                      className={`${
+                        passwordRequirements.hasLowerCase
+                          ? "text-green-500"
+                          : "text-red-500"
+                      }`}
                     >
-                      {passwordRequirements.hasLowerCase ? <FaCheck /> : <FaTimes />}
+                      {passwordRequirements.hasLowerCase ? (
+                        <FaCheck />
+                      ) : (
+                        <FaTimes />
+                      )}
                     </div>
                   }
                 >
@@ -225,10 +288,17 @@ export default function RegisterPage() {
                     <div
                       size="sm"
                       radius="xl"
-                      className={`${passwordRequirements.hasNumberOrSymbol ? "text-green-500" : "text-red-500"
-                        }`}
+                      className={`${
+                        passwordRequirements.hasNumberOrSymbol
+                          ? "text-green-500"
+                          : "text-red-500"
+                      }`}
                     >
-                      {passwordRequirements.hasNumberOrSymbol ? <FaCheck /> : <FaTimes />}
+                      {passwordRequirements.hasNumberOrSymbol ? (
+                        <FaCheck />
+                      ) : (
+                        <FaTimes />
+                      )}
                     </div>
                   }
                 >

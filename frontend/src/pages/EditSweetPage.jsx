@@ -30,6 +30,7 @@ export default function EditSweetPage() {
       exit={{ opacity: 0 }}
       
     >
+      <SEO title={`Edit ${data.sweet.name}`} description={`Edit the details of ${data.sweet.name}`} image={data.sweet.imageUrl} />
       <h2 className="text-4xl font-bold mt-4 mb-8">Edit sweet</h2>
       <SweetForm sweet={data.sweet} />
     </motion.div>
