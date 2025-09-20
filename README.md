@@ -8,7 +8,8 @@ Kata Sweet helps buyers purchase sweets, allow admins to manage sweets and inven
 ## ⚙️ Backend - [Live Demo](https://kata-server.shobhittiwari.me)
 
 ## 📋 Table of Contents
-
+- [Snapshots](#-snapshots)
+- [Tests coverage](#-tests-coverage)
 - [Tech Stack](#-tech-stack)
 - [Features](#-features)
 - [My AI Usage](#-my-ai-usage)
@@ -16,6 +17,19 @@ Kata Sweet helps buyers purchase sweets, allow admins to manage sweets and inven
 - [Prerequisites](#-prerequisites)
 - [Quick Start](#-quick-start)
 - [Integration test](#-integration-test)
+
+## 📷 Snapshots
+<img width="1919" height="1001" alt="Screenshot 2025-09-21 000754" src="https://github.com/user-attachments/assets/4f6d7501-b13f-4c2f-95cd-25f743ae4d70" />
+<img width="1911" height="1002" alt="Screenshot 2025-09-21 000803" src="https://github.com/user-attachments/assets/98238c46-526c-4c2a-b1a6-6b268e81a658" />
+<img width="1918" height="996" alt="Screenshot 2025-09-21 000809" src="https://github.com/user-attachments/assets/75914cdb-1a9e-404e-91b1-0e037b2dee3c" />
+<img width="1919" height="992" alt="Screenshot 2025-09-21 000824" src="https://github.com/user-attachments/assets/8aa664cb-d58d-4295-8679-9ba233de2a8c" />
+<img width="1919" height="998" alt="Screenshot 2025-09-21 000837" src="https://github.com/user-attachments/assets/ed1123b0-cd69-4300-84a0-852d30a7c645" />
+<img width="1919" height="989" alt="Screenshot 2025-09-21 000909" src="https://github.com/user-attachments/assets/a24b1adb-8cd0-480f-8dbf-187404f20a33" />
+<img width="1919" height="997" alt="Screenshot 2025-09-21 000931" src="https://github.com/user-attachments/assets/d7ee8ad7-8c1f-41b5-8721-e8f892c3f8f2" />
+
+## 🧪 Tests coverage
+<img width="1919" height="1058" alt="Screenshot 2025-09-20 232153" src="https://github.com/user-attachments/assets/dc6ace4b-57a8-46d6-b646-eb5311ce4d4e" />
+
 
 ## 🧰 Tech Stack
 
