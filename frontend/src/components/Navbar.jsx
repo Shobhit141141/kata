@@ -3,12 +3,15 @@ import { FaCookie, FaPowerOff } from "react-icons/fa6";
 import { FaUserCheck } from "react-icons/fa";
 import { FaUserPlus } from "react-icons/fa6";
 import { MdInventory, MdOutlineAddCircle } from "react-icons/md";
+import { FiMenu, FiX } from "react-icons/fi";
+import { BsFillPatchQuestionFill } from "react-icons/bs";
 
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Group, Button, Loader, Avatar, Text, Tooltip } from "@mantine/core";
+import { Group, Button, Tooltip } from "@mantine/core";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { logoutUser } from "../api/user";
 import { useAuthContext } from "../context/AuthContext";
+import { useState } from "react";
 
 export default function Navbar() {
   const location = useLocation();
@@ -21,6 +24,8 @@ export default function Navbar() {
     isAdmin,
     tokens,
   } = useAuthContext();
+  const [menuOpen, setMenuOpen] = useState(false);
+
   const logoutMutation = useMutation({
     mutationFn: logoutUser,
     onSuccess: () => {
@@ -49,6 +54,12 @@ export default function Navbar() {
       icon: <AiFillHome className="mr-2 w-5 h-5" />,
     },
     {
+      to: "/quiz",
+      label: "Quiz",
+      show: isAuthenticated,
+      icon: <BsFillPatchQuestionFill className="mr-2 w-5 h-5" />,
+    },
+    {
       to: "/inventory",
       label: "Inventory",
       show: isAuthenticated && isAdmin,
@@ -68,10 +79,11 @@ export default function Navbar() {
         to="/"
         className="text-xl font-bold tracking-wide flex items-center cursive"
       >
-        {/* <img src="/logo.png" alt="" className="w-6 h-auto inline-block mr-2" /> */}
-        <p> Kata Sweets</p>
+        <p>Kata Sweets</p>
       </Link>
-      <Group>
+
+      {/* Desktop Nav */}
+      <div className="hidden md:flex gap-2">
         {navLinks
           .filter((l) => l.show)
           .map((link) => (
@@ -80,23 +92,13 @@ export default function Navbar() {
               component={Link}
               to={link.to}
               variant={location.pathname === link.to ? "filled" : "light"}
-              color=""
             >
               {link.icon}
               {link.label}
             </Button>
           ))}
         {!isAuthLoading && isAuthenticated && authUser && (
-          <div className=" flex flex-row items-center">
-            {/* <Avatar
-              src=""
-              alt={authUser.username}
-              radius="xl"
-              variant="light"
-              color="orange"
-            >
-              <p className=""> {authUser.username.charAt(0).toUpperCase()}</p>
-            </Avatar> */}
+          <div className="flex flex-row items-center">
             <Tooltip
               label={`${tokens} Tokens | 1 token = ₹ 100`}
               withArrow
@@ -117,16 +119,70 @@ export default function Navbar() {
           <Button
             color="red.7"
             variant="filled"
-            onClick={() => {
-              logoutMutation.mutate();
-            }}
+            onClick={() => logoutMutation.mutate()}
             loading={logoutMutation.isPending}
           >
             <FaPowerOff className="mr-2" />
             Logout
           </Button>
         )}
-      </Group>
+      </div>
+
+      <div className="flex gap-4 items-center md:hidden">
+        {!isAuthLoading && isAuthenticated && authUser && (
+          <div className="flex gap-2">
+            <div className="flex items-center bg-pink-200 rounded-md px-3 gap-1 py-2 text-pink-600">
+              <FaCookie />
+              <p className="text-sm font-semibold">{tokens}</p>
+            </div>
+            <div>
+              <p className="text-sm font-semibold">@{authUser.username}</p>
+              <p className="text-xs text-gray-500">{authUser.email}</p>
+            </div>
+          </div>
+        )}
+        {/* Mobile Menu Button */}
+        <div className="">
+          <button onClick={() => setMenuOpen(!menuOpen)}>
+            {menuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Nav */}
+      {menuOpen && (
+        <div className="absolute top-16 left-0 w-full bg-white shadow-md px-6 py-4 flex flex-col gap-3 md:hidden">
+          {navLinks
+            .filter((l) => l.show)
+            .map((link) => (
+              <Button
+                key={link.to}
+                component={Link}
+                to={link.to}
+                variant={location.pathname === link.to ? "filled" : "light"}
+                onClick={() => setMenuOpen(false)}
+              >
+                {link.icon}
+                {link.label}
+              </Button>
+            ))}
+
+          {authUser && (
+            <Button
+              color="red.7"
+              variant="filled"
+              onClick={() => {
+                setMenuOpen(false);
+                logoutMutation.mutate();
+              }}
+              loading={logoutMutation.isPending}
+            >
+              <FaPowerOff className="mr-2" />
+              Logout
+            </Button>
+          )}
+        </div>
+      )}
     </nav>
   );
 }

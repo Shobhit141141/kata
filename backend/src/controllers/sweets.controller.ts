@@ -4,6 +4,7 @@ import { uploadImage, deleteImage, updateImage } from '../utils/cloudinary.js';
 import { MulterRequest } from '../types/index.js';
 import logger from '../utils/logger.js';
 import mongoose from 'mongoose';
+import { getGeminiResponse } from '../services/gemini.js';
 
 export const addSweet = async (req: MulterRequest, res: Response) => {
   try {
@@ -74,6 +75,30 @@ export const getSweetById = async (req: Request, res: Response) => {
     res.json({ success: true, sweet });
   } catch (err) {
     logger.error('Error fetching sweet by ID:', err);
+    const message = err instanceof Error ? err.message : 'Unknown error';
+    res.status(400).json({ success: false, message });
+  }
+};
+
+export const getFunFact = async (req: Request, res: Response) => {
+  try {
+    const { sweetName } = req.params;
+    if (!sweetName) {
+      return res.status(400).json({ success: false, message: 'Sweet name is required' });
+    }
+
+    const funFact = await getGeminiResponse([
+      {
+        role: 'system',
+        content:
+          'You are a fun and engaging assistant that provides interesting facts about sweets.Just return fact without any explanation. Always return new fact in one sentence.',
+      },
+      { role: 'user', content: `Tell me a fun fact about the sweet: ${sweetName}.` },
+    ]);
+
+    res.json({ success: true, funFact });
+  } catch (err) {
+    logger.error('Error fetching fun fact:', err);
     const message = err instanceof Error ? err.message : 'Unknown error';
     res.status(400).json({ success: false, message });
   }

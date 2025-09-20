@@ -79,3 +79,14 @@ export const deleteSweet = async (id) => {
   }
   return await res.json();
 };
+
+export const getFunFact = async (sweetName) => {
+  const res = await fetch(`${API_URL}/sweets/funFact/${encodeURIComponent(sweetName)}`, {
+    credentials: "include",
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.message || "Failed to fetch fun fact");
+  }
+  return await res.json();
+};

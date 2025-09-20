@@ -34,7 +34,6 @@ export default function SweetForm({ sweet, onSuccess }) {
       price: sweet?.price || null,
       quantity: sweet?.quantity || null,
       imageUrl: sweet?.imageUrl || null,
-
     },
   });
 
@@ -73,141 +72,138 @@ export default function SweetForm({ sweet, onSuccess }) {
       onSubmit={handleSubmit(onSubmit)}
       encType="multipart/form-data"
       noValidate
-      className="flex flex-col gap-2 pb-10 josefin"
+      className="flex flex-col gap-4 pb-10 josefin"
     >
-      <Controller
-        name="name"
-        control={control}
-        rules={{ required: "Name is required" }}
-        render={({ field }) => (
-          <TextInput
-            label="Name"
-            placeholder="e.g., Chocolate Cake"
-            required
-            {...field}
-            error={errors.name?.message}
-          />
-        )}
-      />
+      {/* Grid container */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <Controller
+          name="name"
+          control={control}
+          rules={{ required: "Name is required" }}
+          render={({ field }) => (
+            <TextInput
+              label="Name"
+              placeholder="e.g., Chocolate Cake"
+              required
+              {...field}
+              error={errors.name?.message}
+            />
+          )}
+        />
 
-      <Controller
-        name="description"
-        control={control}
-        rules={{ required: "Description is required" }}
-        render={({ field }) => (
-          <Textarea
-            label="Description"
-            placeholder="e.g., A delicious chocolate cake"
-            required
-            {...field}
-            error={errors.description?.message}
-          />
-        )}
-      />
+        <Controller
+          name="description"
+          control={control}
+          rules={{ required: "Description is required" }}
+          render={({ field }) => (
+            <Textarea
+              label="Description"
+              placeholder="e.g., A delicious chocolate cake"
+              required
+              {...field}
+              error={errors.description?.message}
+            />
+          )}
+        />
 
-      <Controller
-        name="category"
-        control={control}
-        rules={{ required: "Category is required" }}
-        render={({ field }) => (
-          <Select
-            label="Category"
-            placeholder="Select category"
-            required
-            data={[
-              { value: "Mithai", label: "Mithai" },
-              { value: "Bengali", label: "Bengali" },
-              { value: "Dry Fruit", label: "Dry Fruit" },
-              { value: "Halwa", label: "Halwa" },
-              { value: "Milk Based", label: "Milk Based" },
-              { value: "Fried", label: "Fried" },
-              { value: "Chhena", label: "Chhena" },
-              { value: "Fusion", label: "Fusion" },
-              { value: "Other", label: "Other" },
-            ]}
-            {...field}
-            error={errors.category?.message}
-          />
-        )}
-      />
+        <Controller
+          name="category"
+          control={control}
+          rules={{ required: "Category is required" }}
+          render={({ field }) => (
+            <Select
+              label="Category"
+              placeholder="Select category"
+              required
+              data={[
+                { value: "Mithai", label: "Mithai" },
+                { value: "Bengali", label: "Bengali" },
+                { value: "Dry Fruit", label: "Dry Fruit" },
+                { value: "Halwa", label: "Halwa" },
+                { value: "Milk Based", label: "Milk Based" },
+                { value: "Fried", label: "Fried" },
+                { value: "Chhena", label: "Chhena" },
+                { value: "Fusion", label: "Fusion" },
+                { value: "Other", label: "Other" },
+              ]}
+              {...field}
+              error={errors.category?.message}
+            />
+          )}
+        />
 
-      <Controller
-        name="price"
-        control={control}
-        rules={{
-          required: "Price is required",
-          min: { value: 1, message: "Price must be positive" },
-        }}
-        render={({ field }) => (
-          <NumberInput
-            label="Price"
-            description="Price in ₹ per kilogram"
-            placeholder="e.g., 10.99"
-            prefix="₹/KG "
-            required
-            {...field}
-            error={errors.price?.message}
-          />
-        )}
-      />
+        <Controller
+          name="price"
+          control={control}
+          rules={{
+            required: "Price is required",
+            min: { value: 1, message: "Price must be positive" },
+          }}
+          render={({ field }) => (
+            <NumberInput
+              label="Price"
+              placeholder="e.g., ₹ 100 per kilogram"
+              prefix="₹/KG "
+              required
+              {...field}
+              error={errors.price?.message}
+            />
+          )}
+        />
 
-      <Controller
-        name="quantity"
-        control={control}
-        rules={{
-          required: "Quantity is required",
-          min: { value: 1, message: "Quantity must be positive" },
-        }}
-        render={({ field }) => (
-          <NumberInput
-            label="Quantity"
-            description="Quantity in kilograms"
-            placeholder="e.g., 50"
-            suffix=" KG"
-            required
-            {...field}
-            error={errors.quantity?.message}
-          />
-        )}
-      />
+        <Controller
+          name="quantity"
+          control={control}
+          rules={{
+            required: "Quantity is required",
+            min: { value: 1, message: "Quantity must be positive" },
+          }}
+          render={({ field }) => (
+            <NumberInput
+              label="Quantity"
+              placeholder="e.g., 50 Kg, 100 Kg"
+              suffix=" KG"
+              required
+              {...field}
+              error={errors.quantity?.message}
+            />
+          )}
+        />
 
-      <Controller
-        name="image"
-        control={control}
-        rules={!isEdit ? { required: "Image is required" } : {}}
-        render={({ field }) => (
-          <FileInput
-            label="Image"
-            placeholder="Choose image"
-            accept="image/*"
-            required={!isEdit}
-            value={field.value}
-            onChange={(file) => field.onChange(file)}
-            error={errors.image?.message}
-            rightSection={<FaFileImage />}
-          />
-        )}
-      />
+        <Controller
+          name="image"
+          control={control}
+          rules={!isEdit ? { required: "Image is required" } : {}}
+          render={({ field }) => (
+            <FileInput
+              label="Image"
+              placeholder="Choose image"
+              accept="image/*"
+              required={!isEdit}
+              value={field.value}
+              onChange={(file) => field.onChange(file)}
+              error={errors.image?.message}
+              rightSection={<FaFileImage />}
+            />
+          )}
+        />
+      </div>
 
       {(image || (isEdit && sweet?.imageUrl)) && (
-        <>
-          {image ? (
-            <div className="flex flex-wrap mt-2 relative w-full aspect-4/3 bg-white rounded-xl shadow-md overflow-hidden">
-              <img
-                src={URL.createObjectURL(image)}
-                alt="Preview"
-                className="object-cover w-full h-full"
-              />
-            </div>
-          ) : (
-            <div className="flex flex-wrap mt-2 relative w-full aspect-4/3 bg-white rounded-xl shadow-md overflow-hidden">
-              <img
-                src={sweet.imageUrl}
-                alt="Current"
-                className="object-cover w-full h-full"
-              />
-            </div>
-          )}
+        <div className="flex items-start gap-4">
+          <div className="flex flex-col gap-2 w-1/2">
+            <div className="flex flex-wrap relative w-full aspect-4/3 bg-white rounded-xl shadow-md overflow-hidden">
+            <img
+              src={image ? URL.createObjectURL(image) : sweet.imageUrl}
+              alt={image ? "Preview" : "Current"}
+              className="object-cover w-full h-full"
+            />
+          </div>
+          <p className="text-sm text-orange-500">
+            The image will be in this aspect ratio: 4:3 <br />
+            {isEdit && "Uploading a new image will replace the current one."}
+          </p>
+          </div>
 
           {image && (
             <Button
@@ -220,19 +216,17 @@ export default function SweetForm({ sweet, onSuccess }) {
             </Button>
           )}
 
-          <p className="text-sm text-orange-500">
-            The image will be in this aspect ratio: 4:3 <br /> 
-            {isEdit && "Uploading a new image will replace the current one."}
-          </p>
-        </>
+          
+        </div>
       )}
 
-      <Group mt="md">
-        <Button type="submit" loading={mutation.isPending}>
+      <div className="flex gap-4 mt-6">
+        <Button type="submit" loading={mutation.isPending} w={"60%"}>
           {isEdit ? "Update" : "Add"}
         </Button>
         <Button
           variant="outline"
+          w={"40%"}
           onClick={() =>
             reset({
               name: "",
@@ -246,7 +240,7 @@ export default function SweetForm({ sweet, onSuccess }) {
         >
           Cancel
         </Button>
-      </Group>
+      </div>
 
       {mutation.isError && (
         <div>

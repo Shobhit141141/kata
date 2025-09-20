@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
-const requiredEnvVars = ['MONGO_URI'];
+const requiredEnvVars = ['MONGO_URI','GEMINI_API_KEY','CLOUDINARY_CLOUD_NAME', 'CLOUDINARY_API_KEY', 'CLOUDINARY_API_SECRET'];
 requiredEnvVars.forEach((key) => {
   if (!process.env[key]) {
     console.log(process.env[key]);
@@ -19,4 +19,6 @@ export const CONSTANTS = {
 
   NODE_ENV: process.env.NODE_ENV || 'development',
   CLIENT_URL: process.env.CLIENT_URL || 'http://localhost:3000',
+
+  GEMINI_API_KEY: process.env.GEMINI_API_KEY || 'your_gemini_api_key',
 };

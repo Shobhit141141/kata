@@ -4,6 +4,7 @@ import {
   fetchSweetById,
   deleteSweet,
   fetchRecommendedSweets,
+  getFunFact,
 } from "../api/sweets";
 import { Loader, Button, Group, Badge, Notification } from "@mantine/core";
 import PurchaseModal from "../components/PurchaseModal";
@@ -52,14 +53,20 @@ export default function SweetDetailsPage() {
 
   const [stockHeadline, setStockHeadline] = useState("");
 
-  const { data, isPending, error } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["sweet", id],
     queryFn: () => fetchSweetById(id),
   });
 
-  const { data: recommendedSweets } = useQuery({
+  const { data: recommendedSweets, isLoading: isLoadingRecommended } = useQuery({
     queryKey: ["recommendedSweets", id],
     queryFn: () => fetchRecommendedSweets(id),
+  });
+
+  const { data: funFact, isLoading: isLoadingFunFact } = useQuery({
+    queryKey: ["funFact", data?.sweet?.name],
+    queryFn: () => getFunFact(data?.sweet?.name),
+    enabled: !!data?.sweet?.name,
   });
 
   const {
@@ -104,16 +111,12 @@ export default function SweetDetailsPage() {
   const sweet = localSweet || data?.sweet;
 
   useEffect(() => {
-    if (sweet) {
+    if (sweet && authUser) {
       setStockHeadline(getRandomStockHeadline(sweet.quantity));
     }
   }, [sweet?.quantity]);
 
-  if (isPending) return <Loader />;
-  if (error instanceof Error)
-    return <Notification color="red">{error.message}</Notification>;
 
-  if (!sweet) return <Notification color="red">Sweet not found</Notification>;
 
   function getStockStatus(quantity) {
     let stockColor = "bg-red-400 border-red-400 text-white";
@@ -132,24 +135,32 @@ export default function SweetDetailsPage() {
     return { stockColor, stockText, stockStatus };
   }
 
+  if (isLoading) {
+  return (
+    <div className="flex justify-center items-center h-screen">
+      <Loader />
+    </div>
+  );
+}
+
   return (
     <motion.div
-      className="pt-20 pb-10 min-h-screen relative flex justify-center items-start px-10 gap-4 w-full mx-auto"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
+      className="pt-20 pb-10 min-h-screen relative flex max-sm:flex-col justify-center items-start px-10 gap-4 w-full mx-auto"
+      // initial={{ opacity: 0 }}
+      // animate={{ opacity: 1 }}
+      // exit={{ opacity: 0 }}
     >
-      <div className="w-[60%] px-6 rounded-xl shadow-lg p-8 bg-white">
-        <div className="flex items-stretch justify-between">
+      <div className="w-full md:w-[60%] px-6 rounded-xl shadow-lg p-8 bg-white">
+        <div className="flex max-sm:flex-col items-stretch justify-between">
           {/* Left Section */}
           <img
             src={sweet.imageUrl}
             alt={sweet.name}
-            className="w-1/2 aspect-[4/3] object-cover rounded-lg shadow-md bg-orange-500"
+            className="w-full md:w-1/2 aspect-[4/3] object-cover rounded-lg shadow-md bg-orange-500 max-sm:mb-6"
           />
 
           {/* Right Section */}
-          <div className="flex flex-col flex-1 ml-6 justify-between">
+          <div className="flex flex-col flex-1 md:ml-6 justify-between">
             {/* Name and Category */}
             <div className="flex flex-col flex-1 ">
               <div className="flex items-start justify-between mb-2">
@@ -158,7 +169,7 @@ export default function SweetDetailsPage() {
                   {sweet.category}
                 </Badge>
               </div>
-              <h4 className="text-gray-500 text-md">{sweet.description}</h4>
+              <h4 className=" text-md">{sweet.description}</h4>
             </div>
 
             {/* Price and Stock */}
@@ -219,14 +230,16 @@ export default function SweetDetailsPage() {
         <div className="mt-6">
           <h3 className="text-2xl font-bold mb-4">
             Fun fact about {sweet.name}
+
+            <p className="text-sm ">using <span className="bg-gradient-to-r from-blue-500  to-pink-500 bg-clip-text text-transparent">Gemini</span></p>
           </h3>
           <p className="text-gray-700 text-md">
-            {sweet.funFact || "No fun fact available."}
+            {isLoadingFunFact ? "Gemini thinking..." : funFact?.funFact || "No fun fact available."}
           </p>
         </div>
       </div>
 
-      <div className=" w-[40%] rounded-xl shadow-lg p-8 bg-white">
+      <div className=" w-full md:w-[40%] rounded-xl shadow-lg p-8 bg-white">
         <h3 className="text-2xl font-bold mb-4">Try These Sweets too.</h3>
         {recommendedSweets?.sweets?.length === 0 && (
           <p>No recommended sweets found.</p>
@@ -235,13 +248,13 @@ export default function SweetDetailsPage() {
           {recommendedSweets?.sweets?.map((sweet) => (
             <div
               key={sweet._id}
-              className="rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition text-black cursor-pointer flex items-center gap-2 "
+              className="rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition text-black cursor-pointer flex items-center gap-2 h-[120px] w-full"
               onClick={() => navigate(`/sweets/${sweet._id}`)}
             >
               <img
                 src={sweet.imageUrl}
                 alt={sweet.name}
-                className="aspect-[4/3] object-cover w-1/3 bg-orange-500"
+                className="h-full object-cover w-[40%] bg-orange-500"
               />
 
               <div className="flex items-center justify-between w-full">

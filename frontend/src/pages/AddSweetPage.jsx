@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 export default function AddSweetPage() {
   return (
     <motion.div
-      className="pt-18 px-10 max-w-md mx-auto"
+      className="pt-18 px-10 max-w-xl mx-auto"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}

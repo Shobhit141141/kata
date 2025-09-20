@@ -40,7 +40,7 @@ function App() {
       <CursorTrail />
       <SEO title="Home" description="Adding sweetness to your moments. " />
 
-      <div className="bg-orange-300/20 josefin min-h-screen z-10">
+      <div className="josefin min-h-screen z-10">
         {/* <BlobBackground /> */}
         <Routes>
           <Route path="/" element={<Home />} />

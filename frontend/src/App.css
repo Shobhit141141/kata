@@ -14,6 +14,7 @@ label {
   font-family: 'Josefin Sans', sans-serif !important;
 }
 
-body {
+body,html {
   overflow-x: hidden;
+  background-color: #FFF0DF !important;
 }
