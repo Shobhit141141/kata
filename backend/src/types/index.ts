@@ -9,10 +9,12 @@ export interface IUser extends Document {
   role: 'user' | 'admin';
   createdAt: Date;
   updatedAt: Date;
+  tokens: number;
 }
 
 export interface ISweet extends Document {
   name: string;
+  description?: string;
   category: string;
   price: number;
   quantity: number;
@@ -26,12 +28,11 @@ declare global {
       user?: IUser;
       accessToken?: string;
       isAdmin?: boolean;
+      
     }
   }
 }
 
 export interface MulterRequest extends Request {
-  file?: {
-    path: string;
-  };
+ file?: Express.Multer.File;
 }

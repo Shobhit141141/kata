@@ -1,17 +1,24 @@
 import winston from 'winston';
 
 const logLevels = {
-  error: 0,
-  warn: 1,
-  info: 2,
-  debug: 3,
-};
-
+  emerg: 0,
+  alert: 1,
+  crit: 2,
+  error: 3,
+  warn: 4,
+  notice: 5,
+  info: 6,
+  debug: 7
+}
 const logColors = {
+  emerg: 'red',
+  alert: 'red',
+  crit: 'pink',
   error: 'red',
   warn: 'yellow',
+  notice: 'gray',
   info: 'cyan',
-  debug: 'green',
+  debug: 'green'
 };
 winston.addColors(logColors);
 
@@ -25,6 +32,8 @@ const logger = winston.createLogger({
   levels: logLevels,
 
   format: logFormat,
+
+  level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
 
   transports: [new winston.transports.Console()],
 

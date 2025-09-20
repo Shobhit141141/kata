@@ -3,17 +3,45 @@ import Sweet from '../models/sweet.model.js';
 import { uploadImage, deleteImage, updateImage } from '../utils/cloudinary.js';
 import { MulterRequest } from '../types/index.js';
 import logger from '../utils/logger.js';
+import mongoose from 'mongoose';
 
 export const addSweet = async (req: MulterRequest, res: Response) => {
   try {
-    const { name, category, price, quantity } = req.body;
+    const { name, description, category, price, quantity } = req.body;
+
+    console.log('Received data:', { name, description, category, price, quantity });
+    if (!name || !description || !category || !price || !quantity) {
+      return res.status(400).json({ success: false, message: 'Some fields are missing' });
+    }
+    const existingSweet = await Sweet.findOne({ name });
+    if (existingSweet) {
+      return res.status(409).json({ success: false, message: 'Sweet name must be unique' });
+    }
+
     let imageUrl, imagePublicId;
-    if (req.file?.path) {
-      const result = await uploadImage(req.file.path, name);
+
+    if (req.file) {
+      const result = (await uploadImage(req.file, name)) as {
+        secure_url: string;
+        public_id: string;
+      };
       imageUrl = result.secure_url;
       imagePublicId = result.public_id;
     }
-    const sweet = await Sweet.create({ name, category, price, quantity, imageUrl, imagePublicId });
+
+    logger.debug('Adding sweet with image URL:', imageUrl);
+    logger.info('Image URL:', imageUrl);
+    console.log('Image URL:', imageUrl);
+
+    const sweet = await Sweet.create({
+      name,
+      description,
+      category,
+      price,
+      quantity,
+      imageUrl,
+      imagePublicId,
+    });
     res.status(201).json({ success: true, sweet });
   } catch (err) {
     logger.error('Error adding sweet:', err);
@@ -33,11 +61,48 @@ export const getSweets = async (_req: Request, res: Response) => {
   }
 };
 
+export const getSweetById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({ success: false, message: 'Sweet ID is required' });
+    }
+    const sweet = await Sweet.findById(id);
+    if (!sweet) {
+      return res.status(404).json({ success: false, message: 'Sweet not found' });
+    }
+    res.json({ success: true, sweet });
+  } catch (err) {
+    logger.error('Error fetching sweet by ID:', err);
+    const message = err instanceof Error ? err.message : 'Unknown error';
+    res.status(400).json({ success: false, message });
+  }
+};
+
+export const getRecommendedSweets = async (req: Request, res: Response) => {
+  try {
+    const { exceptSweetId } = req.query;
+
+    let filter = {};
+    if (exceptSweetId && mongoose.Types.ObjectId.isValid(String(exceptSweetId))) {
+      filter = { _id: { $ne: new mongoose.Types.ObjectId(String(exceptSweetId)) } };
+    }
+
+    const sweets = await Sweet.find(filter).sort({ quantity: -1 }).limit(5);
+    res.json({ success: true, sweets });
+  } catch (err) {
+    logger.error('Error fetching recommended sweets:', err);
+    const message = err instanceof Error ? err.message : 'Unknown error';
+    res.status(400).json({ success: false, message });
+  }
+};
+
 export const searchSweets = async (req: Request, res: Response) => {
   try {
-    const { name, category, minPrice, maxPrice } = req.query;
+    const { name, description, category, minPrice, maxPrice } = req.query;
     const query: any = {};
     if (name) query.name = { $regex: name, $options: 'i' };
+    if (description) query.description = { $regex: description, $options: 'i' };
     if (category) query.category = category;
     if (minPrice || maxPrice) query.price = {};
     if (minPrice) query.price.$gte = Number(minPrice);
@@ -54,12 +119,15 @@ export const searchSweets = async (req: Request, res: Response) => {
 export const updateSweet = async (req: MulterRequest, res: Response) => {
   try {
     const { id } = req.params;
-    const { name, category, price, quantity } = req.body;
+    const { name, description, category, price, quantity } = req.body;
     let sweet = await Sweet.findById(id);
     if (!sweet) return res.status(404).json({ success: false, message: 'Sweet not found' });
     let imageUrl, imagePublicId;
-    if (req.file?.path) {
-      const result = await uploadImage(req.file.path, name);
+    if (req.file) {
+      const result = (await updateImage(sweet.imagePublicId ?? '', req.file, name)) as {
+        secure_url: string;
+        public_id: string;
+      };
       imageUrl = result.secure_url;
       imagePublicId = result.public_id;
       sweet.imageUrl = imageUrl;
@@ -69,6 +137,7 @@ export const updateSweet = async (req: MulterRequest, res: Response) => {
     sweet.category = category || sweet.category;
     sweet.price = price || sweet.price;
     sweet.quantity = quantity || sweet.quantity;
+    sweet.description = description || sweet.description;
     await sweet.save();
     res.json({ success: true, sweet });
   } catch (err) {

@@ -149,3 +149,16 @@ export const logout = (req: Request, res: Response) => {
 
   res.status(200).json({ message: 'Logged out successfully' });
 };
+
+export const meRoute = async (req: Request, res: Response) => {
+  try {
+    const user = await User.findById(req.user?.id).select('-password');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json(user);
+  } catch (err: any) {
+    logger.error('Error occurred while fetching user data:', err);
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+};

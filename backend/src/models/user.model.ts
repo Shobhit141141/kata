@@ -8,6 +8,12 @@ const userSchema = new Schema<IUser>({
   role: { type: String, enum: ['user', 'admin'], default: 'user' },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
+  tokens: {
+    type: Number,
+    required: true,
+    default: 100,
+    set: (val: number) => (Math.round(val * 10) / 10).toFixed(1),
+  },
 });
 
 const User = mongoose.model('User', userSchema);
