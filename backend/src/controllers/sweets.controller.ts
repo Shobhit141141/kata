@@ -6,6 +6,12 @@ import logger from '../utils/logger.js';
 import mongoose from 'mongoose';
 import { getGeminiResponse } from '../services/gemini.js';
 
+/**
+ * Adds a new sweet to the database.
+ * Ensures required fields are provided and the name is unique.
+ * Optionally uploads an image to cloud storage.
+ * Responds with the created sweet on success.
+ */
 export const addSweet = async (req: MulterRequest, res: Response) => {
   try {
     const { name, description, category, price, quantity } = req.body;
@@ -45,6 +51,9 @@ export const addSweet = async (req: MulterRequest, res: Response) => {
   }
 };
 
+/** Retrieves all sweets from the database.
+ * Responds with a list of sweets.
+ */
 export const getSweets = async (_req: Request, res: Response) => {
   try {
     const sweets = await Sweet.find();
@@ -56,6 +65,10 @@ export const getSweets = async (_req: Request, res: Response) => {
   }
 };
 
+/**
+ * Retrieves a sweet by its ID.
+ * Responds with the sweet if found, otherwise returns an error.
+ */
 export const getSweetById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
@@ -74,6 +87,10 @@ export const getSweetById = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * Fetches a fun fact about a specific sweet using an AI service.
+ * Responds with the fun fact or an error message.
+ */
 export const getFunFact = async (req: Request, res: Response) => {
   try {
     const { sweetName } = req.params;
@@ -98,6 +115,10 @@ export const getFunFact = async (req: Request, res: Response) => {
   }
 };
 
+/** 
+ * Retrieves recommended sweets, optionally excluding a specific sweet by ID.
+ * Responds with a list of recommended sweets sorted by quantity.
+ */
 export const getRecommendedSweets = async (req: Request, res: Response) => {
   try {
     const { exceptSweetId } = req.query;
@@ -116,6 +137,10 @@ export const getRecommendedSweets = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * Searches for sweets based on various criteria.
+ * Responds with the search results or an error message.
+ */
 export const searchSweets = async (req: Request, res: Response) => {
   try {
     const { name, description, category, minPrice, maxPrice } = req.query;
@@ -135,6 +160,10 @@ export const searchSweets = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * Updates an existing sweet's details.
+ * Handles optional image updates.
+ */
 export const updateSweet = async (req: MulterRequest, res: Response) => {
   try {
     const { id } = req.params;
@@ -166,6 +195,10 @@ export const updateSweet = async (req: MulterRequest, res: Response) => {
   }
 };
 
+/**
+ * Deletes a sweet from the database.
+ * Handles image deletion from cloud storage if applicable.
+ */
 export const deleteSweet = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;

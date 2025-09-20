@@ -14,7 +14,7 @@ import {
   Badge,
   Paper,
 } from "@mantine/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { restockSweet } from "../api/inventory";
 import { fetchSweets } from "../api/sweets";
 import { toast } from "react-toastify";
@@ -22,6 +22,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { SweetFilters } from "../components/SweetFilters";
 import SEO from "./SEO";
+import Lenis from "@studio-freight/lenis";
 export function InventoryPage() {
   const queryClient = useQueryClient();
 
@@ -45,7 +46,23 @@ export function InventoryPage() {
       toast.error(err.message || "Failed to restock sweet.");
     },
   });
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 0.5,
+      smooth: true,
+    });
 
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy(); 
+    };
+  }, []);
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">

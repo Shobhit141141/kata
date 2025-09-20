@@ -3,7 +3,7 @@ import app from '../src/app.js';
 import mongoose from 'mongoose';
 
 beforeAll(async () => {
-  const uri = 'mongodb://127.0.0.1:27017/myapp_test';
+  const uri = process.env.MONGO_URI_TEST || 'mongodb://127.0.0.1:27017/myapp_test';
   await mongoose.connect(uri);
 });
 

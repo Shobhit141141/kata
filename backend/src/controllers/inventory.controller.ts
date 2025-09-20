@@ -3,6 +3,11 @@ import Sweet from "../models/sweet.model.js";
 import User from "../models/user.model.js";
 import logger from "../utils/logger.js";
 
+/**
+ * Allows a user to purchase a sweet item.
+ * Checks for valid quantity, user authentication, sufficient stock, and enough tokens.
+ * Updates the user's token balance and the sweet's quantity on successful purchase.
+ */
 export const purchaseSweet = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
@@ -61,6 +66,11 @@ export const purchaseSweet = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * Restocks the quantity of a sweet item.
+ * Adds the specified amount to the existing quantity of the sweet.
+ * Returns the updated sweet item.
+ */
 export const restockSweet = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;

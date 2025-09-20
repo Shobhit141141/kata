@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
-const requiredEnvVars = ['MONGO_URI','GEMINI_API_KEY','CLOUDINARY_CLOUD_NAME', 'CLOUDINARY_API_KEY', 'CLOUDINARY_API_SECRET'];
+const requiredEnvVars = ['MONGO_URI','GEMINI_API_KEY','CLOUDINARY_CLOUD_NAME', 'CLOUDINARY_API_KEY', 'CLOUDINARY_API_SECRET', ];
 requiredEnvVars.forEach((key) => {
   if (!process.env[key]) {
     console.log(process.env[key]);

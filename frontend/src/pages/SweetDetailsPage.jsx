@@ -59,10 +59,12 @@ export default function SweetDetailsPage() {
     queryFn: () => fetchSweetById(id),
   });
 
-  const { data: recommendedSweets, isLoading: isLoadingRecommended } = useQuery({
-    queryKey: ["recommendedSweets", id],
-    queryFn: () => fetchRecommendedSweets(id),
-  });
+  const { data: recommendedSweets, isLoading: isLoadingRecommended } = useQuery(
+    {
+      queryKey: ["recommendedSweets", id],
+      queryFn: () => fetchRecommendedSweets(id),
+    }
+  );
 
   const { data: funFact, isLoading: isLoadingFunFact } = useQuery({
     queryKey: ["funFact", data?.sweet?.name],
@@ -117,8 +119,6 @@ export default function SweetDetailsPage() {
     }
   }, [sweet?.quantity]);
 
-
-
   function getStockStatus(quantity) {
     let stockColor = "bg-red-400 border-red-400 text-white";
     let stockText = <>Out of Stock</>;
@@ -137,12 +137,12 @@ export default function SweetDetailsPage() {
   }
 
   if (isLoading) {
-  return (
-    <div className="flex justify-center items-center h-screen">
-      <Loader />
-    </div>
-  );
-}
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <motion.div
@@ -151,7 +151,11 @@ export default function SweetDetailsPage() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <SEO title={sweet ? sweet.name : "Sweet Details"} description={sweet ? sweet.description : "Details of the sweet"} image={sweet ? sweet.imageUrl : "/logo.png"} />
+      <SEO
+        title={sweet ? sweet.name : "Sweet Details"}
+        description={sweet ? sweet.description : "Details of the sweet"}
+        image={sweet ? sweet.imageUrl : "/logo.png"}
+      />
       <div className="w-full md:w-[60%] px-6 rounded-xl shadow-lg p-8 bg-white">
         <div className="flex max-sm:flex-col items-stretch justify-between">
           {/* Left Section */}
@@ -232,11 +236,17 @@ export default function SweetDetailsPage() {
         <div className="mt-6">
           <h3 className="text-2xl font-bold mb-4">
             Fun fact about {sweet.name}
-
-            <p className="text-sm ">using <span className="bg-gradient-to-r from-blue-500  to-pink-500 bg-clip-text text-transparent">Gemini</span></p>
+            <p className="text-sm ">
+              using{" "}
+              <span className="bg-gradient-to-r from-blue-500  to-pink-500 bg-clip-text text-transparent">
+                Gemini
+              </span>
+            </p>
           </h3>
           <p className="text-gray-700 text-md">
-            {isLoadingFunFact ? "Gemini thinking..." : funFact?.funFact || "No fun fact available."}
+            {isLoadingFunFact
+              ? "Gemini thinking..."
+              : funFact?.funFact || "No fun fact available."}
           </p>
         </div>
       </div>
@@ -253,11 +263,13 @@ export default function SweetDetailsPage() {
               className="rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition text-black cursor-pointer flex items-center gap-2 h-[120px] w-full"
               onClick={() => navigate(`/sweets/${sweet._id}`)}
             >
-              <img
-                src={sweet.imageUrl}
-                alt={sweet.name}
-                className="h-full object-cover w-[40%] bg-orange-500"
-              />
+              <div className="h-full w-[170px] overflow-hidden rounded-lg">
+                <img
+                  src={sweet.imageUrl}
+                  alt={sweet.name}
+                  className="h-full w-full object-cover"
+                />
+              </div>
 
               <div className="flex items-center justify-between w-full">
                 <div className="p-2 flex flex-col items-start gap-4 justify-start">

@@ -22,7 +22,7 @@ jest.mock(
 );
 
 beforeAll(async () => {
-  await mongoose.connect('mongodb://127.0.0.1:27017/sweets_test');
+  await mongoose.connect(process.env.MONGO_URI_TEST || 'mongodb://127.0.0.1:27017/sweets_test');
 });
 afterAll(async () => {
   await mongoose.disconnect();

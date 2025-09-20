@@ -80,7 +80,7 @@ export default function Navbar() {
         className="text-xl font-bold tracking-wide flex items-center cursive"
       >
         <img src="/logo.png" alt="Kata Sweets Logo" className=" w-12 h-8" />
-        <p>Kata Sweets</p>
+        <p className="max-md:hidden">Kata Sweets</p>
       </Link>
 
       {/* Desktop Nav */}

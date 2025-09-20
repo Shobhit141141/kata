@@ -5,6 +5,11 @@ import bcrypt from 'bcryptjs';
 import { CONSTANTS } from '../config/constants.js';
 import logger from '../utils/logger.js';
 
+/**
+ * Registers a new user, hashes their password, creates a JWT token,
+ * sets cookies for authentication, and returns the created user details.
+ * Responds with 400 if the email already exists.
+ */
 export const register = async (req: Request, res: Response) => {
   try {
     const { username, email, password }: { username: string; email: string; password: string } =
@@ -62,6 +67,10 @@ export const register = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * Checks if a given username is already taken.
+ * Returns 409 if username exists, otherwise 200 if available.
+ */
 export const checkUsername = async (req: Request, res: Response) => {
   try {
     const { username }: { username: string } = req.body;
@@ -76,6 +85,11 @@ export const checkUsername = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * Logs in an existing user by validating email and password.
+ * Creates a JWT token, sets cookies, and returns user details.
+ * Responds with 400 for invalid credentials or non-existent user.
+ */
 export const login = async (req: Request, res: Response) => {
   try {
     const { email, password }: { email: string; password: string } = req.body;
@@ -128,6 +142,10 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * Logs out a user by clearing authentication cookies.
+ * Always responds with 200 and a logout confirmation message.
+ */
 export const logout = (req: Request, res: Response) => {
   res.clearCookie('token', {
     httpOnly: true,
@@ -148,6 +166,10 @@ export const logout = (req: Request, res: Response) => {
   res.status(200).json({ message: 'Logged out successfully' });
 };
 
+/**
+ * Retrieves the currently authenticated user's profile, excluding the password.
+ * Responds with 404 if the user does not exist.
+ */
 export const meRoute = async (req: Request, res: Response) => {
   try {
     const user = await User.findById(req.user?.id).select('-password');

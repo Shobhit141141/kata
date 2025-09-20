@@ -33,6 +33,14 @@ function PublicRoute({ children }) {
   return children;
 }
 
+function AdminRoute({ children }) {
+  const { isLoading, isAuthenticated, isAdmin } = useAuthContext();
+  if (isLoading) return <Loader className="mx-auto mt-12" />;
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  if (!isAdmin) return <Navigate to="/" replace />;
+  return children;
+}
+
 function App() {
   return (
     <ErrorBoundary>
@@ -54,17 +62,17 @@ function App() {
           <Route
             path="/add-sweet"
             element={
-              <ProtectedRoute>
+              <AdminRoute>
                 <AddSweetPage />
-              </ProtectedRoute>
+              </AdminRoute>
             }
           />
           <Route
             path="/edit-sweet/:id"
             element={
-              <ProtectedRoute>
+              <AdminRoute>
                 <EditSweetPage/>
-              </ProtectedRoute>
+              </AdminRoute>
             }
           />
           <Route
@@ -78,9 +86,9 @@ function App() {
           <Route
             path="/inventory"
             element={
-              <ProtectedRoute>
+              <AdminRoute>
                 <InventoryPage />
-              </ProtectedRoute>
+              </AdminRoute>
             }
           />
           <Route 

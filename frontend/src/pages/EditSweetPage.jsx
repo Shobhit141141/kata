@@ -4,6 +4,7 @@ import { fetchSweetById } from "../api/sweets";
 import SweetForm from "../components/SweetForm";
 import { Loader } from "@mantine/core";
 import {motion} from 'framer-motion'
+import SEO from "./SEO";
 
 export default function EditSweetPage() {
   const { id } = useParams();
@@ -31,7 +32,7 @@ export default function EditSweetPage() {
       
     >
       <SEO title={`Edit ${data.sweet.name}`} description={`Edit the details of ${data.sweet.name}`} image={data.sweet.imageUrl} />
-      <h2 className="text-4xl font-bold mt-4 mb-8">Edit sweet</h2>
+      <h2 className="text-4xl font-bold mt-20 mb-8">Edit sweet</h2>
       <SweetForm sweet={data.sweet} />
     </motion.div>
   );

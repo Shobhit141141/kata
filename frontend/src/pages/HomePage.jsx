@@ -84,6 +84,7 @@ function Home() {
   }, []);
 
   const navigate = useNavigate();
+  
 
   return (
     <motion.div
@@ -144,7 +145,7 @@ function Home() {
       <AnimatePresence>
         <div className="w-[90%] mx-auto my-20 text-center py-20 px-10 bg-white rounded-2xl shadow-lg">
           <h2 className="text-4xl font-bold mb-6">Features of platform</h2>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
               {
                 title: "See, select, sort and filter",

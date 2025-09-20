@@ -11,10 +11,11 @@ import {
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useForm, Controller } from "react-hook-form";
-import React from "react";
+import React, { useEffect } from "react";
 import { fetchSweets } from "../api/sweets";
 import { SweetFilters } from "../components/SweetFilters";
 import SEO from "./SEO";
+import Lenis from "@studio-freight/lenis";
 
 export function SweetsList() {
   const {
@@ -28,12 +29,34 @@ export function SweetsList() {
 
   const [filteredSweets, setFilteredSweets] = React.useState([]);
 
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 0.5,
+      smooth: true,
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy(); 
+    };
+  }, []);
+
   if (isLoading) return <Loader />;
   if (error) return <p className="text-red-500">Failed to load sweets</p>;
 
   return (
-    <div className="pt-18 px-10">
-      <SEO title="Sweets" description="Browse our delicious sweets" image="/logo.png" />
+    <div className="py-18 px-10">
+      <SEO
+        title="Sweets"
+        description="Browse our delicious sweets"
+        image="/logo.png"
+      />
       <h2 className="text-4xl font-bold mt-4 mb-6 text-center">Sweets</h2>
 
       <SweetFilters data={data.sweets} onFilteredChange={setFilteredSweets} />
@@ -90,7 +113,9 @@ export function SweetsList() {
                     </Group>
 
                     <p className="text-xs text-gray-700 mb-3">
-                      {sweet.description || "No description available"}
+                      {sweet.description.length > 50
+                        ? sweet.description.slice(0, 50) + "..."
+                        : sweet.description || "No description available"}
                     </p>
 
                     <div className="flex flex-row-reverse justify-between items-center">

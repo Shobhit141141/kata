@@ -14,7 +14,6 @@ let testUserId: mongoose.Types.ObjectId;
 jest.mock(
   '../src/middlewares/verifyToken',
   () => (req: Request, res: Response, next: NextFunction) => {
-    // Use the testUserId once it exists
     (req as any).user = { id: testUserId?.toString(), role: 'admin' };
     (req as any).isAdmin = true;
     next();
@@ -24,7 +23,7 @@ jest.mock(
 app.use('/api/inventory', inventoryRouter);
 
 beforeAll(async () => {
-  await mongoose.connect('mongodb://127.0.0.1:27017/sweets_test');
+  await mongoose.connect(process.env.MONGO_URI_TEST || 'mongodb://127.0.0.1:27017/sweets_test');
   await User.deleteMany({});
 
   const user = await User.create({
