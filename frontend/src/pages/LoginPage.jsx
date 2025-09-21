@@ -29,7 +29,7 @@ export default function LoginPage() {
     onSuccess: () => {
       refetch();
       toast.success("Login successful");
-      navigate("/");
+      navigate("/sweets");
     },
     onError: (err) => {
       toast.error(err?.message || "Login failed");
