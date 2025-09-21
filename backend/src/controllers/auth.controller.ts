@@ -55,6 +55,7 @@ export const register = async (req: Request, res: Response) => {
         secure: CONSTANTS.NODE_ENV === 'dev' ? false : true,
         sameSite: CONSTANTS.NODE_ENV === 'dev' ? 'lax' : 'none',
         domain: CONSTANTS.NODE_ENV === 'dev' ? '' : '.shobhittiwari.me',
+        maxAge: 24 * 60 * 60 * 1000,
       },
     );
 
@@ -115,6 +116,7 @@ export const login = async (req: Request, res: Response) => {
       secure: CONSTANTS.NODE_ENV === 'dev' ? false : true,
       sameSite: CONSTANTS.NODE_ENV === 'dev' ? 'lax' : 'none',
       domain: CONSTANTS.NODE_ENV === 'dev' ? '' : '.shobhittiwari.me',
+      maxAge: 24 * 60 * 60 * 1000,
     });
 
     res.cookie(
