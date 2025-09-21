@@ -29,7 +29,7 @@ function ProtectedRoute({ children }) {
 function PublicRoute({ children }) {
   const { isLoading, isAuthenticated } = useAuthContext();
   if (isLoading) return <Loader className="mx-auto mt-12" />;
-  if (isAuthenticated) return <Navigate to="/" replace />;
+  if (isAuthenticated) return <Navigate to="/sweets" replace />;
   return children;
 }
 

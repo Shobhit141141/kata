@@ -34,7 +34,7 @@ export default function RegisterPage() {
     onSuccess: () => {
       refetch();
       toast.success("Registration successful");
-      navigate("/success");
+      navigate("/sweets");
     },
     onError: (err) => {
       toast.error(err?.message || "Registration failed");
