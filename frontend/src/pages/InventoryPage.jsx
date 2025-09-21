@@ -103,12 +103,13 @@ export function InventoryPage() {
           onFilteredChange={(filtered) => setFilteredSweets(filtered)}
         />
 
-        <Stack>
-          <Table striped highlightOnHover withTableBorder>
+        <Stack className="overflow-x-auto">
+          <Table striped highlightOnHover withTableBorder stickyHeader >
             <Table.Thead>
               <Table.Tr>
                 <Table.Th>S. No.</Table.Th>
                 <Table.Th>Image</Table.Th>
+                
                 <Table.Th>Name</Table.Th>
                 <Table.Th>Quantity</Table.Th>
                 <Table.Th>Price (/kg)</Table.Th>
@@ -133,7 +134,7 @@ export function InventoryPage() {
                       <img
                         src={sweet.imageUrl}
                         alt={sweet.name}
-                        className="w-32 h-32 object-cover"
+                        className="w-24 md:w-32 h-10 md:h-32 object-cover rounded-md"
                       />
                     </Table.Td>
                     <Table.Td>

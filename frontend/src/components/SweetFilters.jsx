@@ -104,7 +104,7 @@ export function SweetFilters({
             };
 
             return (
-              <div className="flex gap-2">
+              <div className="flex gap-2 flex-wrap justify-center">
                 {["all", "low", "high", "out"].map((val) => (
                   <Chip
                     key={val}

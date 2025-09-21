@@ -5,7 +5,7 @@ import { FaUserPlus } from "react-icons/fa6";
 import { MdInventory, MdOutlineAddCircle } from "react-icons/md";
 import { FiMenu, FiX } from "react-icons/fi";
 import { BsFillPatchQuestionFill } from "react-icons/bs";
-
+import { motion } from "framer-motion";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Group, Button, Tooltip } from "@mantine/core";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -84,7 +84,11 @@ export default function Navbar() {
       </Link>
 
       {/* Desktop Nav */}
-      <div className="hidden md:flex gap-2">
+      <motion.div className="hidden md:flex gap-2"
+        initial={{ opacity: 0, y: -15, filter: "blur(10px)" }}
+        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        transition={{ duration: 0.3 }}
+      >
         {navLinks
           .filter((l) => l.show)
           .map((link) => (
@@ -127,7 +131,7 @@ export default function Navbar() {
             Logout
           </Button>
         )}
-      </div>
+      </motion.div>
 
       <div className="flex gap-4 items-center md:hidden">
         {!isAuthLoading && isAuthenticated && authUser && (
@@ -144,15 +148,24 @@ export default function Navbar() {
         )}
         {/* Mobile Menu Button */}
         <div className="">
-          <button onClick={() => setMenuOpen(!menuOpen)}>
+          <motion.button onClick={() => setMenuOpen(!menuOpen)}
+          initial={{ rotate: 0 }}
+          animate={{ rotate: menuOpen ? 90 : 0 }}
+          transition={{ duration: 0.2 }}
+            >
             {menuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
-          </button>
+          </motion.button>
         </div>
       </div>
 
       {/* Mobile Nav */}
       {menuOpen && (
-        <div className="absolute top-16 left-0 w-full bg-white shadow-md px-6 py-4 flex flex-col gap-3 md:hidden">
+        <motion.div className="absolute top-16 left-0 w-full bg-white shadow-md px-6 py-4 flex flex-col gap-3 md:hidden"
+          initial={{ opacity: 0, y: -15, filter: "blur(10px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          exit={{ opacity: 0, y: -15, filter: "blur(10px)" }}
+          transition={{ duration: 0.3 }}
+        >
           {navLinks
             .filter((l) => l.show)
             .map((link) => (
@@ -182,7 +195,7 @@ export default function Navbar() {
               Logout
             </Button>
           )}
-        </div>
+        </motion.div>
       )}
     </nav>
   );
