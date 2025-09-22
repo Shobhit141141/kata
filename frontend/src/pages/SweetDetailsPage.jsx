@@ -14,6 +14,10 @@ import { purchaseSweet } from "../api/inventory";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import SEO from "./SEO";
+import { BiEdit } from "react-icons/bi";
+import { BiSolidPurchaseTagAlt } from "react-icons/bi";
+import { MdDelete } from "react-icons/md";
+
 function getRandomStockHeadline(quantity) {
   const headlines = {
     plenty: [
@@ -146,7 +150,7 @@ export default function SweetDetailsPage() {
 
   return (
     <motion.div
-      className="pt-20 pb-10 min-h-screen relative flex max-sm:flex-col justify-center items-start px-10 gap-4 w-full mx-auto"
+      className="pt-20 pb-10 min-h-screen relative flex max-sm:flex-col justify-center items-start px-4 md:px-10 gap-4 w-full mx-auto"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -194,29 +198,36 @@ export default function SweetDetailsPage() {
           </div>
         </div>
 
-        {!isAuthLoading && isAuthenticated && isAdmin ? (
-          <div className="flex gap-4 mt-6">
+        <div className="flex flex-col items-start mt-6">
+          <p className="font-semibold">{stockHeadline}</p>
+
+          <div className="flex gap-4 mt-2 flex-wrap">
+            {isAuthenticated && isAdmin && (
+              <>
+                <Button
+                  color="orange"
+                  onClick={() => navigate(`/edit-sweet/${sweet._id}`)}
+                  leftSection={<BiEdit size={18} />}
+                >
+                  Edit
+                </Button>
+
+                <Button
+                  color="red"
+                  onClick={() => deleteMutation.mutate(sweet._id)}
+                  loading={deleteMutation.isPending}
+                  leftSection={<MdDelete size={18} />}
+                >
+                  Delete
+                </Button>
+              </>
+            )}
+
             <Button
-              color="orange"
-              onClick={() => navigate(`/edit-sweet/${sweet._id}`)}
-            >
-              Edit
-            </Button>
-            <Button
-              color="red"
-              onClick={() => deleteMutation.mutate(sweet._id)}
-              loading={deleteMutation.isPending}
-            >
-              Delete
-            </Button>
-          </div>
-        ) : (
-          <div className="flex flex-col items-start mt-6">
-            <p>{stockHeadline}</p>
-            <Button
-              className="mt-2"
+              className="m"
               color="blue"
               onClick={() => setPurchaseOpen(true)}
+              leftSection={<BiSolidPurchaseTagAlt size={18} />}
             >
               Purchase
             </Button>
@@ -231,7 +242,7 @@ export default function SweetDetailsPage() {
               }}
             />
           </div>
-        )}
+        </div>
 
         <div className="mt-6">
           <h3 className="text-2xl font-bold mb-4">

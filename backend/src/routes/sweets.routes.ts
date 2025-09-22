@@ -20,7 +20,7 @@ router.get('/', verifyToken, getSweets);
 router.get('/recommended', verifyToken, getRecommendedSweets);
 router.get('/search', verifyToken, searchSweets);
 router.get('/funfact/:sweetName', verifyToken, getFunFact);
-router.put('/:id', verifyToken, upload.single('file'), updateSweet);
+router.put('/:id', verifyToken, adminMiddleware, upload.single('file'), updateSweet);
 router.get('/:id', verifyToken, getSweetById);
 router.delete('/:id', verifyToken, adminMiddleware, deleteSweet);
 
